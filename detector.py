@@ -15,17 +15,14 @@ class BusDetector:
     """
     BusDetector wraps YOLOv8 to detect vehicles in video frames.
     
-    COCO Dataset Class Indexes for Vehicles:
-      2: Car
-      3: Motorcycle
-      5: Bus
-      7: Truck
+    COCO Dataset Class Indexes:
+      5: Bus  ← Only buses are detected and tracked
     """
-    
+
     def __init__(self, model_name: str = "yolov8n.pt", confidence: float = 0.25):
         """
         Initialize the YOLOv8 model.
-        
+
         :param model_name: YOLO model file (e.g., 'yolov8n.pt' or 'models/yolov8n.pt')
         :param confidence: Minimum confidence score (0.0 to 1.0) to filter detections
         """
@@ -39,9 +36,9 @@ class BusDetector:
         print(f"[INFO] Loading YOLOv8 model: {model_path}...")
         self.model = YOLO(model_path)
         self.confidence = confidence
-        
-        # Include all vehicle class IDs (2: Car, 3: Motorcycle, 5: Bus, 7: Truck)
-        self.target_classes = [2, 3, 5, 7]
+
+        # Only track buses (COCO class ID 5)
+        self.target_classes = [5]
 
         
     def detect(self, frame: np.ndarray):

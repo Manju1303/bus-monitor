@@ -1,0 +1,1475 @@
+***************************************************************
+*                                                             *
+* Copyright Hikvision Digital Technology Co., Ltd.            *
+*                                                             *
+***************************************************************
+
+77 logs output
+
+
+User: admin Date:06/08/2026 Time: 16:00:34 made video export from device 0820250510CCWRFZ6631590WCVU
+
+
+----------------------------
+1     2026-07-24 09:09:35
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 09:09:35] cost[3929 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1134] SegNo[0] eT[2026-07-24 09:09:35]
+
+
+
+----------------------------
+2     2026-07-24 09:09:35
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 09:09:35] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1199] SegNo[0]
+
+
+
+----------------------------
+3     2026-07-24 09:09:35
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 09:09:35] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 09:09:35] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+----------------------------
+4     2026-07-24 09:12:10
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[6][VIDEO] time[2026-07-24 09:12:10] cost[4089 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1511] SegNo[0] eT[2026-07-24 09:12:10]
+
+
+
+----------------------------
+5     2026-07-24 09:12:10
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[6][VIDEO] time[2026-07-24 09:12:10] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1501] SegNo[0]
+
+
+
+----------------------------
+6     2026-07-24 09:12:10
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[6][VIDEO] time[2026-07-24 09:12:10] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 09:12:10] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+----------------------------
+7     2026-07-24 09:16:58
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,0,0,ON,NULL
+10,2,0,0,0,0,0,0,ON,NULL
+11,2,0,0,0,0,0,0,ON,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+8     2026-07-24 09:16:59
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,0,0,ON,/dev/h_sda
+10,2,1,0,0,5,0,0,ON,/dev/h_sda
+11,2,1,0,0,5,0,0,ON,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+9     2026-07-24 09:20:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+A1 Len: 97252272 R: 43760 W: 447124 Time: 24-07-2026 09:20:39
+A2 Len: 202000144 R: 776256 W: 1435032 Time: 24-07-2026 09:20:39
+A3 Len: 214382576 R: 157676 W: 763644 Time: 24-07-2026 09:20:39
+A4 Len: 352348164 R: 1927252 W: 2379628 Time: 24-07-2026 09:20:39
+A5 Len: 222413428 R: 980724 W: 1331268 Time: 24-07-2026 09:20:39
+A6 Len: 345255104 R: 1166376 W: 1287524 Time: 24-07-2026 09:20:39
+A7 Len: 315200788 R: 1357048 W: 1595836 Time: 24-07-2026 09:20:39
+A8 Len: 315277860 R: 2489856 W: 2693140 Time: 24-07-2026 09:20:39
+D1 Len: 443271540 R: 1218040 W: 2100728 Time: 24-07-2026 09:20:39
+D2 Len: 640838440 R: 2289212 W: 1574520 Time: 24-07-2026 09:20:39
+D3 Len: 640355792 R: 1113472 W: 2055416 Time: 24-07-2026 09:20:39
+D4 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D5 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D6 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D7 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D8 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D9 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D10 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D11 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D12 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D13 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D14 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D15 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D16 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+
+
+
+----------------------------
+10    2026-07-24 09:20:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+System status: 1
+User: 6%
+Sys: 0%
+Iowait: 3%
+Soft: 0%
+Idle: 90%
+Total memory: 565.43MB
+Free memory: 183.87MB
+Buffer: 284KB
+Cached: 0KB
+Main output: HDMI(2)
+Main output status: 0
+Main output screen-division: 0
+Enable main output screensaver: 1
+Aux output: Main CVBS(1)
+Aux output status: 0
+Aux output screen-division: 0
+Enable Aux output  screensaver: 1
+Current output: 2
+Motherboard temperature: 127
+DSP status: 
+CPU Temperature: 66
+Flash write frequency: 0
+
+
+
+----------------------------
+11    2026-07-24 09:23:35
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+12    2026-07-24 09:23:38
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+13    2026-07-24 09:23:50
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Alarm Arming
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+14    2026-07-24 09:23:51
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+15    2026-07-24 09:24:13
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[7][VIDEO] time[2026-07-24 09:24:13] cost[4056 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1482] SegNo[0] eT[2026-07-24 09:24:12]
+
+
+
+----------------------------
+16    2026-07-24 09:24:13
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[7][VIDEO] time[2026-07-24 09:24:13] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1474] SegNo[0]
+
+
+
+----------------------------
+17    2026-07-24 09:24:13
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[7][VIDEO] time[2026-07-24 09:24:13] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 09:24:12] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+----------------------------
+18    2026-07-24 09:27:00
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,0,0,ON,NULL
+10,2,0,0,0,0,0,0,ON,NULL
+11,2,0,0,0,0,0,0,ON,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+19    2026-07-24 09:27:01
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,0,0,ON,/dev/h_sda
+10,2,1,0,0,5,0,0,ON,/dev/h_sda
+11,2,1,0,0,5,0,0,ON,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+20    2026-07-24 09:36:28
+----------------------------
+Major Type: Exception
+Minor Type: Hik-Connect Remote Operation Exception
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Exception error code: 0xe0000106
+Error information description: other error
+Basic Parameter LBS address: litedev.hik-connect.com
+LBS port: 8666
+User ID: 0000000000000000
+Time sync switch: Enabled
+
+
+----------------------------
+21    2026-07-24 09:36:40
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 4
+Camera Status: Unreachable
+
+
+----------------------------
+22    2026-07-24 09:36:42
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D3
+
+Camera No.: D3
+Stream type: Main Stream
+Offline time: 20 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+23    2026-07-24 09:36:43
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D1
+
+Camera No.: D1
+Stream type: Sub-Stream
+Offline time: 25 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+24    2026-07-24 09:36:43
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D2
+
+Camera No.: D2
+Stream type: Main Stream
+Offline time: 25 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+25    2026-07-24 09:36:43
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D3
+
+Camera No.: D3
+Stream type: Sub-Stream
+Offline time: 24 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+26    2026-07-24 09:36:43
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D2
+
+Camera No.: D2
+Stream type: Sub-Stream
+Offline time: 25 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+27    2026-07-24 09:36:45
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D1
+
+Camera No.: D1
+Stream type: Main Stream
+Offline time: 27 seconds
+Extra information: Connect error -- connect server err
+
+
+----------------------------
+28    2026-07-24 09:36:45
+----------------------------
+Major Type: Exception
+Minor Type: IP Camera Disconnected
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D3
+
+Channel No.: D3
+IP address: ::
+Domain name: 
+Protocol: ONVIF
+Management port: 80
+Device channel No.: 1
+Transport protocol: Auto
+Auto add network camera: No
+Extra information: Data Overtime -- No stream for 20s
+
+
+----------------------------
+29    2026-07-24 09:36:47
+----------------------------
+Major Type: Exception
+Minor Type: IP Camera Disconnected
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D1
+
+Channel No.: D1
+IP address: ::
+Domain name: 
+Protocol: ONVIF
+Management port: 80
+Device channel No.: 1
+Transport protocol: Auto
+Auto add network camera: No
+Extra information: Data Overtime -- No stream for 20s
+
+
+----------------------------
+30    2026-07-24 09:36:48
+----------------------------
+Major Type: Exception
+Minor Type: IP Camera Disconnected
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: D2
+
+Channel No.: D2
+IP address: ::
+Domain name: 
+Protocol: ONVIF
+Management port: 80
+Device channel No.: 1
+Transport protocol: Auto
+Auto add network camera: No
+Extra information: Data Overtime -- No stream for 20s
+
+
+----------------------------
+31    2026-07-24 09:36:50
+----------------------------
+Major Type: Exception
+Minor Type: Hik-Connect Remote Operation Exception
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Exception error code: 0xe0000109
+Error information description: other error
+Basic Parameter LBS address: litedev.hik-connect.com
+LBS port: 8666
+User ID: 0000000000000000
+Time sync switch: Enabled
+
+
+----------------------------
+32    2026-07-24 09:36:53
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 3
+Camera Status: Unreachable
+
+
+----------------------------
+33    2026-07-24 09:36:55
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 1
+Camera Status: Unreachable
+
+
+----------------------------
+34    2026-07-24 09:36:56
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 2
+Camera Status: Unreachable
+
+
+----------------------------
+35    2026-07-24 09:37:02
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,1,0,OFF,NULL
+10,2,0,0,0,0,1,0,OFF,NULL
+11,2,0,0,0,0,1,0,OFF,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+36    2026-07-24 09:37:03
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,1,0,OFF,/dev/h_sda
+10,2,1,0,0,5,1,0,OFF,/dev/h_sda
+11,2,1,0,0,5,1,0,OFF,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+37    2026-07-24 09:37:32
+----------------------------
+Major Type: Exception
+Minor Type: Hik-Connect Offline Exception
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Hik-Connect Offline Status:3758096649
+Hik-ConnectEnable:Yes
+Hik-ConnectOperate Code:GBFz70
+Restart Regist LBS:No
+Das Server Valid:No
+Stun1 Server Valid:No
+Stun2 Server Valid:No
+Lbs Server IP:litedev.hik-connect.com
+Das Server IP:
+Stun1 Server IP:
+Stun2 Server IP:
+Lbs Server Port:8666
+Das Server Port:0
+Stun1 Server Port:0
+Stun2 Server Port:0
+Dns Server 1 IP:192.168.50.1
+Dns Server 2 IP:8.8.8.8
+
+
+----------------------------
+38    2026-07-24 09:38:12
+----------------------------
+Major Type: Exception
+Minor Type: Hik-Connect Remote Operation Exception
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Exception error code: 0xe0000105
+Error information description: net error
+Basic Parameter LBS address: litedev.hik-connect.com
+LBS port: 8666
+User ID: 0000000000000000
+Time sync switch: Enabled
+
+
+----------------------------
+39    2026-07-24 09:40:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+A1 Len: 89886924 R: 1788328 W: 2253664 Time: 24-07-2026 09:40:39
+A2 Len: 207453692 R: 979084 W: 1270676 Time: 24-07-2026 09:40:39
+A3 Len: 178184204 R: 2542520 W: 2787080 Time: 24-07-2026 09:40:39
+A4 Len: 314323476 R: 1681252 W: 2130304 Time: 24-07-2026 09:40:39
+A5 Len: 186887492 R: 2191120 W: 2620808 Time: 24-07-2026 09:40:39
+A6 Len: 307361780 R: 200524 W: 367960 Time: 24-07-2026 09:40:39
+A7 Len: 315128452 R: 1635824 W: 2151488 Time: 24-07-2026 09:40:39
+A8 Len: 314975812 R: 2580396 W: 3096152 Time: 24-07-2026 09:40:39
+D1 Len: 398311892 R: 2264448 W: 1698484 Time: 24-07-2026 09:36:17
+D2 Len: 500955528 R: 0 W: 0 Time: 24-07-2026 09:36:47
+D3 Len: 500267492 R: 379568 W: 2160508 Time: 24-07-2026 09:36:16
+D4 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D5 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D6 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D7 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D8 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D9 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D10 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D11 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D12 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D13 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D14 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D15 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D16 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+
+
+
+----------------------------
+40    2026-07-24 09:40:40
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+System status: 1
+User: 4%
+Sys: 0%
+Iowait: 4%
+Soft: 0%
+Idle: 90%
+Total memory: 565.43MB
+Free memory: 183.97MB
+Buffer: 176KB
+Cached: 0KB
+Main output: HDMI(2)
+Main output status: 0
+Main output screen-division: 0
+Enable main output screensaver: 1
+Aux output: Main CVBS(1)
+Aux output status: 0
+Aux output screen-division: 0
+Enable Aux output  screensaver: 1
+Current output: 2
+Motherboard temperature: 127
+DSP status: 
+CPU Temperature: 66
+Flash write frequency: 0
+
+
+
+----------------------------
+41    2026-07-24 09:41:36
+----------------------------
+Major Type: Information
+Minor Type: HDD S.M.A.R.T.
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+HDD No.: 1
+
+Hard disk = 1
+Firmware = CV10
+Model     = ST2000VX017-3CV102
+Serial    = WWD43DXH
+ID  Attribute name                      Flags   Threshold   Value   Worst   Raw Value   Status  
+
+1   Raw Read Error Rate                 f       6           75      64      29449200    OK      
+3   Spin Up Time                        3       0           98      98      0           OK      
+4   Start/Stop Count                    32      20          100     100     4           OK      
+5   Reallocated Sector Count            33      10          100     100     0           OK      
+7   Seek Error Rate                     f       45          82      60      166209813   OK      
+9   Power-on Hours Count                32      0           92      92      7483        OK      
+a   Spin Up Retry Count                 13      97          100     100     0           OK      
+c   Power Cycle Count                   32      20          100     100     4           OK      
+b7  SATA Downshift Count                32      0           96      96      4           OK      
+b8  L2P error count                     32      99          100     100     0           OK      
+bb  Reported Uncorrectable Errors       32      0           100     100     0           OK      
+bc  Command Timeout                     32      0           100     100     0           OK      
+bd  High Fly Writes                     3a      0           100     100     0           OK      
+be  Temperature Difference from 100     22      40          54      46      841744430   OK      
+bf  G-Sense Error Rate                  32      0           100     100     0           OK      
+c0  Power Off Retract Count             32      0           100     100     98          OK      
+c1  Load/Unload Cycle Count             32      0           100     100     314         OK      
+c2  Power temperature                   22      0           46      54      137438953518OK      
+c3  ECC on the Fly count                1a      0           75      64      29449200    OK      
+c5  Current Pending Sector Count        12      0           100     100     0           OK      
+c6  Off-line Scan Uncorrect. Sector Count   10      0           100     100     0           OK      
+c7  Ultra ATA CRC Error Rate            3e      0           200     200     0           OK      
+f0  Head Flying Hours                   0       0           100     253     132924942851340OK      
+f1  Counts sectors written by the host  0       0           100     253     72270600688 OK      
+f2  Counts sectors read by the host     0       0           100     253     60909473601 OK      
+
+
+
+----------------------------
+42    2026-07-24 09:47:04
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,1,0,OFF,NULL
+10,2,0,0,0,0,1,0,OFF,NULL
+11,2,0,0,0,0,1,0,OFF,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+43    2026-07-24 09:47:05
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,1,0,OFF,/dev/h_sda
+10,2,1,0,0,5,1,0,OFF,/dev/h_sda
+11,2,1,0,0,5,1,0,OFF,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+44    2026-07-24 09:52:02
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Alarm Disarming
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+45    2026-07-24 09:57:06
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,1,0,OFF,NULL
+10,2,0,0,0,0,1,0,OFF,NULL
+11,2,0,0,0,0,1,0,OFF,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+46    2026-07-24 09:57:07
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,1,0,OFF,/dev/h_sda
+10,2,1,0,0,5,1,0,OFF,/dev/h_sda
+11,2,1,0,0,5,1,0,OFF,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+47    2026-07-24 10:00:34
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[8][VIDEO] time[2026-07-24 10:00:34] cost[4053 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1472] SegNo[0] eT[2026-07-24 10:00:34]
+
+
+
+----------------------------
+48    2026-07-24 10:00:34
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[8][VIDEO] time[2026-07-24 10:00:34] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1462] SegNo[0]
+
+
+
+----------------------------
+49    2026-07-24 10:00:34
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[8][VIDEO] time[2026-07-24 10:00:34] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 10:00:34] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+----------------------------
+50    2026-07-24 10:00:40
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+A1 Len: 90120424 R: 987616 W: 1147976 Time: 24-07-2026 10:00:40
+A2 Len: 206067268 R: 2372928 W: 2865624 Time: 24-07-2026 10:00:40
+A3 Len: 179745936 R: 2612160 W: 80792 Time: 24-07-2026 10:00:39
+A4 Len: 307016608 R: 632248 W: 865568 Time: 24-07-2026 10:00:40
+A5 Len: 185858760 R: 2503404 W: 2881616 Time: 24-07-2026 10:00:40
+A6 Len: 296622776 R: 839036 W: 1292304 Time: 24-07-2026 10:00:39
+A7 Len: 315186256 R: 2230404 W: 2764944 Time: 24-07-2026 10:00:40
+A8 Len: 315880232 R: 1020960 W: 1257856 Time: 24-07-2026 10:00:40
+D1 Len: 0 R: 2264448 W: 1698484 Time: 01-01-1970 00:00:00
+D2 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D3 Len: 0 R: 379568 W: 2160508 Time: 01-01-1970 00:00:00
+D4 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D5 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D6 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D7 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D8 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D9 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D10 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D11 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D12 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D13 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D14 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D15 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+D16 Len: 0 R: 0 W: 0 Time: 01-01-1970 00:00:00
+
+
+
+----------------------------
+51    2026-07-24 10:00:40
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+System status: 1
+User: 4%
+Sys: 0%
+Iowait: 0%
+Soft: 0%
+Idle: 95%
+Total memory: 565.43MB
+Free memory: 184.32MB
+Buffer: 168KB
+Cached: 0KB
+Main output: HDMI(2)
+Main output status: 0
+Main output screen-division: 0
+Enable main output screensaver: 1
+Aux output: Main CVBS(1)
+Aux output status: 0
+Aux output screen-division: 0
+Enable Aux output  screensaver: 1
+Current output: 2
+Motherboard temperature: 127
+DSP status: 
+CPU Temperature: 66
+Flash write frequency: 0
+
+
+
+----------------------------
+52    2026-07-24 10:01:42
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[2][VIDEO] time[2026-07-24 10:01:42] cost[6299 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1484] SegNo[0] eT[2026-07-24 10:01:42]
+
+
+
+----------------------------
+53    2026-07-24 10:01:42
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[2][VIDEO] time[2026-07-24 10:01:42] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1479] SegNo[0]
+
+
+
+----------------------------
+54    2026-07-24 10:01:42
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[2][VIDEO] time[2026-07-24 10:01:42] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 10:01:42] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+----------------------------
+55    2026-07-24 10:04:33
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 4
+Camera Status: Unknown error
+
+
+----------------------------
+56    2026-07-24 10:04:33
+----------------------------
+Major Type: Operation
+Minor Type: Hik-Connect Remote Registration
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+DAS domain name/DAS IP: 43.205.154.161/43.205.154.161 
+DAS TCP/UDP port: 8820/6800 
+LBS domain name/IP: litedev.hik-connect.com:8666/3.111.11.71
+
+
+----------------------------
+57    2026-07-24 10:04:33
+----------------------------
+Major Type: Information
+Minor Type: Hik-Connect Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Hik-Connect alarm time interval: 60s
+
+
+----------------------------
+58    2026-07-24 10:04:33
+----------------------------
+Major Type: Information
+Minor Type: Hik-Connect Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Hik-Connect alarm time interval: 0s
+
+
+----------------------------
+59    2026-07-24 10:04:50
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 2
+Camera Status: The IP camera is connected
+
+
+----------------------------
+60    2026-07-24 10:04:51
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Information
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.:2
+IP camera model:CP-UNC-TA61L3C-LQ
+IP camera version:3.120.00HD001.0.R
+IP camera serial No.:XLZP2NX8ZJJD1ABU
+
+
+----------------------------
+61    2026-07-24 10:04:53
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 1
+Camera Status: The IP camera is connected
+
+
+----------------------------
+62    2026-07-24 10:04:57
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Information
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.:1
+IP camera model:CP-UNC-TA61L3C-LQ
+IP camera version:3.120.00HD001.0.R
+IP camera serial No.:X9IMCF32SZYXIQIB
+
+
+----------------------------
+63    2026-07-24 10:04:58
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.: 3
+Camera Status: The IP camera is connected
+
+
+----------------------------
+64    2026-07-24 10:04:59
+----------------------------
+Major Type: Information
+Minor Type: IP Camera Connection Information
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Camera No.:3
+IP camera model:CP-UNC-TA61L3C-LQ
+IP camera version:3.120.00HD001.0.R
+IP camera serial No.:TDG5KIRB62FXHE9P
+
+
+----------------------------
+65    2026-07-24 10:05:41
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+66    2026-07-24 10:05:43
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+67    2026-07-24 10:07:08
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,0,0,ON,NULL
+10,2,0,0,0,0,0,0,ON,NULL
+11,2,0,0,0,0,0,0,ON,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+68    2026-07-24 10:07:09
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,0,0,ON,/dev/h_sda
+10,2,1,0,0,5,0,0,ON,/dev/h_sda
+11,2,1,0,0,5,0,0,ON,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+69    2026-07-24 10:07:30
+----------------------------
+Major Type: Exception
+Minor Type: Illegal Login
+Local User: illegal usernam
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+70    2026-07-24 10:07:44
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+71    2026-07-24 10:07:56
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+72    2026-07-24 10:09:47
+----------------------------
+Major Type: Operation
+Minor Type: Remote Operation: Login
+Local User: admin
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+
+
+
+----------------------------
+73    2026-07-24 10:17:10
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+chan,chanType,recType,Stat,overflow,recordCommand,bPause,bSwitch,Online,Disk
+1,1,0,1,0,0,0,0,OFF,/dev/h_sda
+2,1,0,1,0,0,0,0,OFF,/dev/h_sda
+3,1,0,1,0,0,0,0,OFF,/dev/h_sda
+4,1,0,1,0,0,0,0,OFF,/dev/h_sda
+5,1,0,1,0,0,0,0,OFF,/dev/h_sda
+6,1,0,1,0,0,0,0,OFF,/dev/h_sda
+7,1,0,1,0,0,0,0,OFF,/dev/h_sda
+8,1,0,1,0,0,0,0,OFF,/dev/h_sda
+9,2,0,0,0,0,0,0,ON,NULL
+10,2,0,0,0,0,0,0,ON,NULL
+11,2,0,0,0,0,0,0,ON,NULL
+12,2,0,0,0,0,0,0,OFF,NULL
+1,1,1,0,0,0,0,0,OFF,NULL
+2,1,1,0,0,0,0,0,OFF,NULL
+3,1,1,0,0,0,0,0,OFF,NULL
+4,1,1,0,0,0,0,0,OFF,NULL
+
+
+
+----------------------------
+74    2026-07-24 10:17:11
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+5,1,1,0,0,0,0,0,OFF,NULL
+6,1,1,1,0,5,0,0,OFF,/dev/h_sda
+7,1,1,0,0,0,0,0,OFF,NULL
+8,1,1,0,0,0,0,0,OFF,NULL
+9,2,1,0,0,5,0,0,ON,/dev/h_sda
+10,2,1,0,0,5,0,0,ON,/dev/h_sda
+11,2,1,0,0,5,0,0,ON,/dev/h_sda
+12,2,1,1,0,5,0,0,OFF,/dev/h_sda
+
+
+
+----------------------------
+75    2026-07-24 10:18:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 10:18:39] cost[4144 s] Opt[FINALIZE_FILE] Status[-17] bFinal[1] HdNo[1] FileNo[1199] SegNo[0] eT[2026-07-24 10:18:39]
+
+
+
+----------------------------
+76    2026-07-24 10:18:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 10:18:39] cost[0 s] Opt[ALLOC_FILE] Status[1] HdNo[1] FileNo[1503] SegNo[0]
+
+
+
+----------------------------
+77    2026-07-24 10:18:39
+----------------------------
+Major Type: Information
+Minor Type: System Running Status
+Local User: N/A
+Host IP Address: N/A
+Parameter Type: N/A
+Camera No.: N/A
+
+Chan[4][VIDEO] time[2026-07-24 10:18:39] cost[0 s] Opt[FIRST_KEY] FirstKey[2026-07-24 10:18:39] LastKey[1970-01-01 00:00:00] bCpLastKey[0] IFrames[1]
+
+
+
+
+
+********************** LOG  END*************************
+
+

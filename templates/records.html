@@ -74,6 +74,7 @@
                             <th>Duration</th>
                             <th>Date</th>
                             <th>Status</th>
+                            <th>Snapshot</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,12 +108,19 @@
                                     <span class="badge badge-exited">EXITED</span>
                                     {% endif %}
                                 </td>
+                                <td>
+                                    {% if rec['Snapshot'] %}
+                                    <a href="/static/snapshots/{{ rec['Snapshot'] }}" target="_blank" class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; text-decoration: none;">📸 View Image</a>
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                                    No records found in database file <code>bus_gate_log.xlsx</code>.
+                                <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                    No records found in database.
                                 </td>
                             </tr>
                         {% endif %}
@@ -129,4 +137,3 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
-

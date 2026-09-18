@@ -67,23 +67,26 @@
                 <div class="metric-info">
                     <h4>System Health</h4>
                     <div class="metric-value" style="font-size: 1.1rem; padding-top: 4px;" id="stat-model-status">Operational</div>
-                    <div class="metric-sub">Camera & Reader Active</div>
+                    <div class="metric-sub">SQLite DB & YOLO Active</div>
                 </div>
             </div>
         </div>
 
         <!-- Dashboard Layout Grid -->
         <div class="dashboard-grid">
-            <!-- Left Panel: Live Stream & Video Upload Control -->
+            <!-- Left Panel: Live Stream & Surveillance Source Selection -->
             <div class="panel">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <span>📹</span> Live Gate Surveillance Feed
+                        <span>📹</span> Live Surveillance Stream ({{ camera_name }})
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <label for="video-source-select" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Feed Source:</label>
                         <select id="video-source-select" class="input-field" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;">
-                            <option value="sample_file">Sample Bus Video</option>
+                            <option value="default_footage">Footage Folder CCTV</option>
+                            {% for f in footage_files %}
+                            <option value="footage/{{ f }}">Footage: {{ f }}</option>
+                            {% endfor %}
                             <option value="webcam">Live USB Webcam (0)</option>
                         </select>
                     </div>
@@ -96,7 +99,7 @@
                         <div class="dropzone-icon">📤</div>
                         <div class="dropzone-text">
                             <strong>Upload Bus Video File</strong>
-                            <p>Drag and drop your MP4, AVI, or MOV video here, or click to browse</p>
+                            <p>Drag and drop CCTV video (MP4, AVI, MOV) here or browse</p>
                         </div>
                         <button type="button" class="btn-secondary" id="browse-btn" onclick="document.getElementById('video-upload-input').click();">
                             <span>📂 Browse Files</span>
@@ -110,7 +113,7 @@
                     <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed">
                     <div class="stream-overlay">
                         <div class="badge-live">
-                            <div class="pulse-dot"></div> CAMERA 01 - LIVE
+                            <div class="pulse-dot"></div> {{ camera_name }} - LIVE
                         </div>
                     </div>
                 </div>
@@ -120,7 +123,7 @@
             <div class="panel">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <span>📋</span> Recent Activity Feed
+                        <span>📋</span> Recent Gate Activity Log
                     </div>
                     <a href="{{ url_for('records') }}" class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View All Logs</a>
                 </div>
@@ -133,7 +136,10 @@
                                 <span class="plate-number">{{ log['Registration Plate'] }}</span>
                                 <span class="activity-time">{{ log['Entry Time'] if log['Entry Time'] != '-' else log['Exit Time'] }}</span>
                             </div>
-                            <div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                {% if log['Snapshot'] %}
+                                <a href="/static/snapshots/{{ log['Snapshot'] }}" target="_blank" title="View JPEG Evidence Snapshot" style="text-decoration: none;">📸</a>
+                                {% endif %}
                                 {% if log['Status'] == 'ON CAMPUS' %}
                                 <span class="badge badge-campus">ON CAMPUS</span>
                                 {% else %}
@@ -159,4 +165,3 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
-

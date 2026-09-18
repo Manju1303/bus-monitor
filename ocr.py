@@ -1,7 +1,8 @@
 """
-ocr.py - OCR Module for Bus Monitoring System
----------------------------------------------
-Reads vehicle registration numbers using EasyOCR.
+ocr.py - OCR Preprocessing & Plate Recognition Module
+------------------------------------------------------
+Reads vehicle registration numbers using EasyOCR with CLAHE and Otsu contrast enhancement.
+Multi-candidate evaluation boosts recognition accuracy on noisy, shadowed, or reflective plates.
 """
 
 import re
@@ -11,14 +12,15 @@ import numpy as np
 
 
 class PlateReader:
+    """
+    License plate reader leveraging EasyOCR with adaptive image preprocessing.
+    """
 
     def __init__(self, languages=None, gpu=False):
-
         if languages is None:
             languages = ["en"]
 
-        print("[INFO] Loading EasyOCR...")
-
+        print("[INFO] Initializing EasyOCR plate reader...")
         try:
             self.reader = easyocr.Reader(languages, gpu=gpu)
             print("[INFO] EasyOCR loaded successfully.")
@@ -26,135 +28,94 @@ class PlateReader:
             print("[ERROR] EasyOCR initialization failed:", e)
             self.reader = None
 
-    # ---------------------------------------------------------
-    # Image Preprocessing
-    # ---------------------------------------------------------
-    def preprocess_image(self, image):
-
+    def preprocess_variants(self, image):
+        """
+        Generate preprocessed image variants (CLAHE contrast boost, Otsu thresholding, grayscale)
+        to increase OCR hit rate across different lighting and plate conditions.
+        """
         if image is None or image.size == 0:
-            return None
+            return []
 
-        # Convert to grayscale
+        # Convert to grayscale if needed
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
             gray = image.copy()
 
-        # Resize
-        gray = cv2.resize(
-            gray,
-            None,
-            fx=2,
-            fy=2,
-            interpolation=cv2.INTER_CUBIC,
-        )
+        # Upscale 2x for better character resolution
+        gray = cv2.resize(gray, None, fx=2.0, fy=2.0, interpolation=cv2.INTER_CUBIC)
 
-        # Noise removal
-        gray = cv2.bilateralFilter(gray, 11, 17, 17)
+        # Bilateral filter for noise reduction while preserving edges
+        denoised = cv2.bilateralFilter(gray, 11, 17, 17)
 
-        # Threshold
-        thresh = cv2.threshold(
-            gray,
-            0,
-            255,
-            cv2.THRESH_BINARY + cv2.THRESH_OTSU,
-        )[1]
+        # Variant 1: CLAHE (Contrast Limited Adaptive Histogram Equalization)
+        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+        enhanced_clahe = clahe.apply(denoised)
 
-        return thresh
+        # Variant 2: Otsu Binary Thresholding
+        _, otsu = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    # ---------------------------------------------------------
-    # Clean OCR Output
-    # ---------------------------------------------------------
-    def clean_text(self, text):
+        return [enhanced_clahe, otsu, denoised]
 
+    def clean_text(self, text: str) -> str:
+        """Strip non-alphanumeric characters and convert to uppercase."""
         text = text.upper()
+        return re.sub(r"[^A-Z0-9]", "", text)
 
-        text = re.sub(r"[^A-Z0-9]", "", text)
-
-        return text
-
-    # ---------------------------------------------------------
-    # Validate Indian Registration Number
-    # Example:
-    # TN38AB1234
-    # KA01MN5678
-    # ---------------------------------------------------------
-    def valid_plate(self, text):
-
+    def valid_plate(self, text: str) -> bool:
+        """
+        Validate Indian vehicle registration plate pattern:
+        Examples: TN38AB1234, KA01MN5678, DL3CC1234, MH12DE9999
+        """
         pattern = r"^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{3,4}$"
-
         return re.match(pattern, text) is not None
 
-    # ---------------------------------------------------------
-    # OCR
-    # ---------------------------------------------------------
-    def read_plate(self, image):
+    def read_plate(self, image) -> tuple[str, float]:
+        """
+        Extract registration plate text and confidence score from a cropped plate ROI.
+        Evaluates multiple image preprocessing variants to maximize OCR accuracy.
 
-        if self.reader is None:
+        :param image: BGR cropped numpy array of vehicle front/rear plate area
+        :return: (plate_text, confidence_score)
+        """
+        if self.reader is None or image is None or image.size == 0:
             return "", 0.0
 
-        processed = self.preprocess_image(image)
-
-        if processed is None:
-            return "", 0.0
-
-        try:
-            results = self.reader.readtext(
-                processed,
-                detail=1,
-                paragraph=False
-            )
-        except Exception as e:
-            print("[OCR ERROR]", e)
+        variants = self.preprocess_variants(image)
+        if not variants:
             return "", 0.0
 
         best_plate = ""
         best_conf = 0.0
 
-        for _, text, conf in results:
-
-            plate = self.clean_text(text)
-
-            if self.valid_plate(plate):
-
-                if conf > best_conf:
-                    best_plate = plate
-                    best_conf = conf
-
-        # Fallback if no valid Indian plate found
-        if best_plate == "":
+        for img_variant in variants:
+            try:
+                results = self.reader.readtext(img_variant, detail=1, paragraph=False)
+            except Exception as e:
+                continue
 
             for _, text, conf in results:
-
                 plate = self.clean_text(text)
+                conf_val = float(conf)
 
-                if len(plate) >= 5 and conf > best_conf:
+                if self.valid_plate(plate):
+                    if conf_val > best_conf:
+                        best_plate = plate
+                        best_conf = conf_val
+                elif best_plate == "" and len(plate) >= 5 and conf_val > best_conf:
+                    # Fallback candidate if standard pattern match hasn't succeeded yet
                     best_plate = plate
-                    best_conf = conf
+                    best_conf = conf_val
 
-        return best_plate, round(float(best_conf), 2)
+        return best_plate, round(best_conf, 2)
 
 
-# -----------------------------------------------------------------
-# Test
-# -----------------------------------------------------------------
 if __name__ == "__main__":
-
+    # Test OCR reader on synthetic plate image
     img = np.ones((120, 350, 3), dtype=np.uint8) * 255
-
-    cv2.putText(
-        img,
-        "TN38AB1234",
-        (15, 75),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1.5,
-        (0, 0, 0),
-        3,
-    )
+    cv2.putText(img, "TN38AB1234", (15, 75), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 3)
 
     ocr = PlateReader(gpu=False)
-
     plate, confidence = ocr.read_plate(img)
-
     print("\nDetected Plate :", plate)
     print("Confidence     :", confidence)

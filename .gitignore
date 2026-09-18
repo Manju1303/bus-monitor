@@ -34,9 +34,18 @@ venv.bak/
 
 # Project runtime logs & generated files
 *.xlsx
+*.db
 uploads/
 output/
 models/
+static/snapshots/
+
+# CCTV footage files (1GB+ files excluded from git)
+footage/*.mp4
+footage/*.avi
+footage/*.mov
+footage/*.mkv
+footage/*.webm
 
 # IDE / Editor files
 .vscode/

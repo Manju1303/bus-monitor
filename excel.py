@@ -7,6 +7,7 @@ and prevents duplicate log entries in 'bus_gate_log.xlsx'.
 """
 
 import os
+import threading
 from datetime import datetime
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
@@ -21,7 +22,7 @@ class ExcelLogger:
     def __init__(self, filename: str = "bus_gate_log.xlsx"):
         """
         Initialize the Excel Logger.
-        
+
         :param filename: Target Excel spreadsheet path
         """
         self.filename = filename
@@ -29,6 +30,7 @@ class ExcelLogger:
             "Log ID", "Vehicle ID", "Registration Plate", "Direction",
             "Entry Time", "Exit Time", "Duration (Minutes)", "Date", "Status"
         ]
+        self._lock = threading.Lock()  # Prevents concurrent write corruption
         self._ensure_file_exists()
 
     def _ensure_file_exists(self):
@@ -64,7 +66,8 @@ class ExcelLogger:
         """
         Log an entry or exit event to the Excel file.
         Updates an existing 'ON CAMPUS' record if exiting, or creates a new entry record.
-        
+        Thread-safe via internal lock.
+
         :param vehicle_id: Unique tracked vehicle ID number
         :param plate_no: Recognized bus plate number string (e.g., 'TN38AB1234')
         :param direction: 'Entry' or 'Exit'
@@ -74,50 +77,53 @@ class ExcelLogger:
         timestamp_str = now.strftime("%Y-%m-%d %H:%M:%S")
         date_str = now.strftime("%Y-%m-%d")
         plate_clean = plate_no.upper() if plate_no else "UNKNOWN"
-        
-        wb = openpyxl.load_workbook(self.filename)
-        ws = wb["Gate Activity Logs"]
-        
-        # Check if plate is already currently inside campus without an exit timestamp
-        updated_existing = False
-        if direction == "Exit":
-            for row_idx in range(2, ws.max_row + 1):
-                row_plate = ws.cell(row=row_idx, column=3).value
-                row_status = ws.cell(row=row_idx, column=9).value
-                
-                if row_plate == plate_clean and row_status == "ON CAMPUS":
-                    entry_time_str = ws.cell(row=row_idx, column=5).value
-                    try:
-                        entry_dt = datetime.strptime(entry_time_str, "%Y-%m-%d %H:%M:%S")
-                        duration_mins = round((now - entry_dt).total_seconds() / 60.0, 1)
-                    except Exception:
-                        duration_mins = 0.0
-                    
-                    ws.cell(row=row_idx, column=6, value=timestamp_str) # Exit Time
-                    ws.cell(row=row_idx, column=7, value=duration_mins)  # Duration
-                    ws.cell(row=row_idx, column=9, value="EXITED")      # Status
-                    updated_existing = True
-                    break
-                    
-        if not updated_existing:
-            # Create a new log row
-            log_id = ws.max_row # Auto-increment ID based on row count
-            status = "ON CAMPUS" if direction == "Entry" else "EXITED"
-            entry_t = timestamp_str if direction == "Entry" else "-"
-            exit_t = timestamp_str if direction == "Exit" else "-"
-            duration = "-"
-            
-            new_row = [log_id, f"BUS-{vehicle_id}", plate_clean, direction, entry_t, exit_t, duration, date_str, status]
-            ws.append(new_row)
-            
-            # Apply cell styling
-            align = Alignment(horizontal="center", vertical="center")
-            for c in range(1, len(new_row) + 1):
-                ws.cell(row=ws.max_row, column=c).alignment = align
 
-        wb.save(self.filename)
+        with self._lock:
+            wb = openpyxl.load_workbook(self.filename)
+            ws = wb["Gate Activity Logs"]
+
+            # Check if plate is already currently inside campus without an exit timestamp
+            updated_existing = False
+            if direction == "Exit":
+                for row_idx in range(2, ws.max_row + 1):
+                    row_plate = ws.cell(row=row_idx, column=3).value
+                    row_status = ws.cell(row=row_idx, column=9).value
+
+                    if row_plate == plate_clean and row_status == "ON CAMPUS":
+                        entry_time_str = ws.cell(row=row_idx, column=5).value
+                        try:
+                            entry_dt = datetime.strptime(entry_time_str, "%Y-%m-%d %H:%M:%S")
+                            duration_mins = round((now - entry_dt).total_seconds() / 60.0, 1)
+                        except Exception:
+                            duration_mins = 0.0
+
+                        ws.cell(row=row_idx, column=6, value=timestamp_str)  # Exit Time
+                        ws.cell(row=row_idx, column=7, value=duration_mins)   # Duration
+                        ws.cell(row=row_idx, column=9, value="EXITED")         # Status
+                        updated_existing = True
+                        break
+
+            if not updated_existing:
+                # Auto-increment log ID: data rows start at row 2, so ID = max_row (header is row 1)
+                log_id = ws.max_row  # After append this becomes max_row+1; gives unique sequential IDs
+                status = "ON CAMPUS" if direction == "Entry" else "EXITED"
+                entry_t = timestamp_str if direction == "Entry" else "-"
+                exit_t = timestamp_str if direction == "Exit" else "-"
+                duration = "-"
+
+                new_row = [log_id, f"BUS-{vehicle_id}", plate_clean, direction,
+                           entry_t, exit_t, duration, date_str, status]
+                ws.append(new_row)
+
+                # Apply cell styling
+                align = Alignment(horizontal="center", vertical="center")
+                for c in range(1, len(new_row) + 1):
+                    ws.cell(row=ws.max_row, column=c).alignment = align
+
+            wb.save(self.filename)
+
         print(f"[EXCEL LOG] Logged {direction} for Bus {plate_clean} at {timestamp_str}")
-        
+
         return {
             "vehicle_id": vehicle_id,
             "plate": plate_clean,
