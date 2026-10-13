@@ -15,7 +15,7 @@ class VehicleTracker:
     and detects crossing over virtual campus gate line thresholds.
     """
     
-    def __init__(self, max_disappeared: int = 15, max_distance: int = 80, gate_line_y: int = 250):
+    def __init__(self, max_disappeared: int = 15, max_distance: int = 150, gate_line_y: int = 250):
         """
         :param max_disappeared: Frames to wait before unregistering a lost object ID
         :param max_distance: Max pixel displacement between frames to consider the same object

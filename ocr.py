@@ -62,6 +62,39 @@ class PlateReader:
         text = text.upper()
         return re.sub(r"[^A-Z0-9]", "", text)
 
+    def correct_plate_characters(self, text: str) -> str:
+        """
+        Post-correct character confusions based on standard Indian license plate structure:
+        Example: TN38AB1234
+        Characters 0-1: Letters (State Code: TN, KA, MH, DL, etc.)
+        Characters 2-3: Digits (RTO Code: 01-99)
+        Characters 4-(len-4): Letters (Series: AB, C)
+        Last 4 characters: Digits (Vehicle number: 0001-9999)
+        """
+        if len(text) < 8 or len(text) > 11:
+            return text
+
+        chars = list(text)
+        to_letters = {'0': 'O', '1': 'I', '2': 'Z', '5': 'S', '8': 'B'}
+        to_digits  = {'O': '0', 'I': '1', 'L': '1', 'Z': '2', 'B': '8', 'S': '5', 'G': '6'}
+
+        # Positions 0, 1 should be letters
+        for i in (0, 1):
+            if chars[i] in to_letters:
+                chars[i] = to_letters[chars[i]]
+
+        # Positions 2, 3 should be digits
+        for i in (2, 3):
+            if chars[i] in to_digits:
+                chars[i] = to_digits[chars[i]]
+
+        # Last 4 characters should be digits
+        for i in range(len(chars) - 4, len(chars)):
+            if chars[i] in to_digits:
+                chars[i] = to_digits[chars[i]]
+
+        return "".join(chars)
+
     def valid_plate(self, text: str) -> bool:
         """
         Validate Indian vehicle registration plate pattern:
@@ -91,21 +124,22 @@ class PlateReader:
         for img_variant in variants:
             try:
                 results = self.reader.readtext(img_variant, detail=1, paragraph=False)
-            except Exception as e:
+            except Exception:
                 continue
 
             for _, text, conf in results:
-                plate = self.clean_text(text)
+                raw_plate = self.clean_text(text)
+                corrected_plate = self.correct_plate_characters(raw_plate)
                 conf_val = float(conf)
 
-                if self.valid_plate(plate):
-                    if conf_val > best_conf:
-                        best_plate = plate
+                for candidate in (raw_plate, corrected_plate):
+                    if self.valid_plate(candidate):
+                        if conf_val > best_conf:
+                            best_plate = candidate
+                            best_conf = conf_val
+                    elif best_plate == "" and len(candidate) >= 5 and conf_val > best_conf:
+                        best_plate = candidate
                         best_conf = conf_val
-                elif best_plate == "" and len(plate) >= 5 and conf_val > best_conf:
-                    # Fallback candidate if standard pattern match hasn't succeeded yet
-                    best_plate = plate
-                    best_conf = conf_val
 
         return best_plate, round(best_conf, 2)
 
