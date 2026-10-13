@@ -29,5 +29,5 @@ EXPOSE 5000
 
 ENV PORT=5000
 
-# Launch Flask application
-CMD ["python", "app.py"]
+# Launch production server with multi-threading
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 8 --timeout 120 app:app"]

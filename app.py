@@ -162,8 +162,10 @@ def generate_frames():
     # Multi-frame plate voting store: vehicle_id -> list of OCR string readings
     plate_votes = {}
     last_source = current_video_source
+    frame_idx = 0
 
     while True:
+        frame_idx += 1
         # Detect video source changes dynamically
         if last_source != current_video_source:
             if cap is not None:
@@ -240,14 +242,16 @@ def generate_frames():
                     best_dist = dist
                     matched_id = veh_id
 
-            # Collect OCR vote for matched vehicle
+            # Collect OCR vote for matched vehicle (optimized: skip if already determined, rate-limited)
             if matched_id is not None and ocr is not None and det is not None:
-                roi = det.crop_plate_region(frame, box)
-                plate_text, conf = ocr.read_plate(roi)
-                if plate_text:
-                    if matched_id not in plate_votes:
-                        plate_votes[matched_id] = []
-                    plate_votes[matched_id].append(plate_text)
+                current_votes = len(plate_votes.get(matched_id, []))
+                if current_votes < 2 and (frame_idx % 3 == 0):
+                    roi = det.crop_plate_region(frame, box)
+                    plate_text, conf = ocr.read_plate(roi)
+                    if plate_text:
+                        if matched_id not in plate_votes:
+                            plate_votes[matched_id] = []
+                        plate_votes[matched_id].append(plate_text)
 
             # Determine best plate string via majority voting across frames
             display_plate = "READING..."
