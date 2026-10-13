@@ -424,6 +424,20 @@ def serve_snapshot(filename):
     return send_from_directory(SNAPSHOT_FOLDER, filename)
 
 
+@app.route('/manifest.json')
+def serve_manifest():
+    """Serve PWA web application manifest."""
+    return send_from_directory(os.path.join(BASE_DIR, 'static'), 'manifest.json', mimetype='application/manifest+json')
+
+
+@app.route('/sw.js')
+def serve_sw():
+    """Serve PWA Service Worker script with root scope."""
+    response = send_from_directory(os.path.join(BASE_DIR, 'static'), 'sw.js', mimetype='application/javascript')
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
+
 if __name__ == '__main__':
     print("=================================================================")
     print(" 🚌 CAMPUS BUS GATE ENTRY & EXIT MONITORING SYSTEM")

@@ -1,14 +1,32 @@
 /* ==========================================================================
    Campus Transit Monitor - Frontend JavaScript Logic
-   Drag & Drop Video Upload, Live Stream Controls, KPI Polling & Records Search
+   Drag & Drop Video Upload, Live Stream Controls, KPI Polling, Records Search & PWA
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initServiceWorker();
     initStatsPolling();
     initRecordsFiltering();
     initStreamControls();
     initVideoUpload();
 });
+
+/**
+ * Register Progressive Web App (PWA) Service Worker
+ */
+function initServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => {
+                    console.log('[PWA] Service Worker registered successfully:', reg.scope);
+                })
+                .catch(err => {
+                    console.warn('[PWA] Service Worker registration failed:', err);
+                });
+        });
+    }
+}
 
 /**
  * Poll KPI metrics every 3 seconds to update dashboard status numbers
@@ -168,7 +186,7 @@ function initVideoUpload() {
             const data = await res.json();
 
             if (data.success) {
-                showStatus('✓ Uploaded & Active: ' + data.filename, 'success');
+                showStatus('Uploaded & Active: ' + data.filename, 'success');
 
                 // Check if option exists in dropdown, else add it
                 if (sourceSelect) {
@@ -205,4 +223,3 @@ function initVideoUpload() {
         statusMsg.style.display = 'block';
     }
 }
-

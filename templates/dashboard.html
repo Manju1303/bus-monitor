@@ -3,86 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Transit Monitor - Gate Entry & Exit Management</title>
+    <title>Live Gate Monitor - Campus Transit Security</title>
+
+    <!-- PWA Primary Meta Tags -->
+    <meta name="theme-color" content="#2563EB">
+    <meta name="description" content="Live AI gate entry and exit surveillance dashboard">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BusMonitor">
+    <link rel="manifest" href="{{ url_for('serve_manifest') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32.png') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- Main Header & Navigation -->
+    <!-- Top Header -->
     <header class="app-header">
-        <div class="brand-wrapper">
-            <div class="brand-icon">🚌</div>
-            <div class="brand-text">
-                <span class="brand-title">Campus Transit Monitor</span>
-                <span class="brand-sub">Gate Security & Vehicle Activity Tracker</span>
+        <div class="header-container">
+            <a href="{{ url_for('dashboard') }}" class="brand-wrapper">
+                <div class="brand-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 6v6"/>
+                        <path d="M16 6v6"/>
+                        <path d="M2 12h20"/>
+                        <path d="M4 18v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2"/>
+                        <path d="M17 18v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2"/>
+                        <rect width="20" height="14" x="2" y="4" rx="3"/>
+                        <circle cx="6.5" cy="15.5" r="1"/>
+                        <circle cx="17.5" cy="15.5" r="1"/>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-title">Campus Transit Monitor</span>
+                    <span class="brand-sub">Gate Security & Automated Vehicle Activity Tracker</span>
+                </div>
+            </a>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="{{ url_for('dashboard') }}" class="nav-link active">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m22 8-6 4 6 4V8Z"/>
+                                <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                            </svg>
+                            <span>Live Monitor</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('records') }}" class="nav-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                                <path d="M3 9h18"/>
+                                <path d="M9 21V9"/>
+                            </svg>
+                            <span>Activity Records</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="user-badge">
+                    <div class="user-avatar">A</div>
+                    <span>{{ session.get('user', 'Security Admin') }}</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-link" title="Sign out">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Sign Out</span>
+                </a>
             </div>
-        </div>
-
-        <nav>
-            <ul class="nav-menu">
-                <li><a href="{{ url_for('dashboard') }}" class="nav-link active">🎥 Live Monitor</a></li>
-                <li><a href="{{ url_for('records') }}" class="nav-link">📋 Activity Records</a></li>
-            </ul>
-        </nav>
-
-        <div class="user-badge">
-            <div class="avatar">A</div>
-            <span>{{ session.get('user', 'Gate Admin') }}</span>
-            <a href="{{ url_for('logout') }}" style="margin-left: 10px; color: var(--danger); font-size: 0.8rem; font-weight: 600;" title="Logout">Logout</a>
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content">
         <!-- Top Metrics Overview -->
         <div class="metrics-grid">
-            <div class="metric-card" style="--card-accent: var(--primary);">
-                <div class="metric-icon">📊</div>
+            <div class="metric-card">
+                <div class="metric-icon-box primary">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                </div>
                 <div class="metric-info">
-                    <h4>Total Gate Logs</h4>
-                    <div class="metric-value" id="stat-total-records">{{ stats.total_records }}</div>
-                    <div class="metric-sub">Recorded vehicle movements</div>
+                    <span class="metric-label">Total Gate Logs</span>
+                    <span class="metric-value" id="stat-total-records">{{ stats.total_records }}</span>
+                    <span class="metric-sub">Recorded vehicle movements</span>
                 </div>
             </div>
 
-            <div class="metric-card" style="--card-accent: var(--success);">
-                <div class="metric-icon">🚌</div>
+            <div class="metric-card">
+                <div class="metric-icon-box success">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="14" x="2" y="4" rx="3"/>
+                        <path d="M8 6v6"/>
+                        <path d="M16 6v6"/>
+                        <path d="M2 12h20"/>
+                        <circle cx="6.5" cy="15.5" r="1"/>
+                        <circle cx="17.5" cy="15.5" r="1"/>
+                    </svg>
+                </div>
                 <div class="metric-info">
-                    <h4>Buses On Campus</h4>
-                    <div class="metric-value" id="stat-on-campus">{{ stats.on_campus }}</div>
-                    <div class="metric-sub">Currently inside facility</div>
+                    <span class="metric-label">Buses On Campus</span>
+                    <span class="metric-value" id="stat-on-campus">{{ stats.on_campus }}</span>
+                    <span class="metric-sub">Currently inside facility</span>
                 </div>
             </div>
 
-            <div class="metric-card" style="--card-accent: var(--warning);">
-                <div class="metric-icon">🏁</div>
+            <div class="metric-card">
+                <div class="metric-icon-box warning">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                        <line x1="4" y1="22" x2="4" y2="15"/>
+                    </svg>
+                </div>
                 <div class="metric-info">
-                    <h4>Exited Today</h4>
-                    <div class="metric-value" id="stat-exited-today">{{ stats.exited_today }}</div>
-                    <div class="metric-sub">Completed campus visits</div>
+                    <span class="metric-label">Exited Today</span>
+                    <span class="metric-value" id="stat-exited-today">{{ stats.exited_today }}</span>
+                    <span class="metric-sub">Completed campus departures</span>
                 </div>
             </div>
 
-            <div class="metric-card" style="--card-accent: var(--info);">
-                <div class="metric-icon">🛡️</div>
+            <div class="metric-card">
+                <div class="metric-icon-box info">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
                 <div class="metric-info">
-                    <h4>System Health</h4>
-                    <div class="metric-value" style="font-size: 1.1rem; padding-top: 4px;" id="stat-model-status">Operational</div>
-                    <div class="metric-sub">SQLite DB & YOLO Active</div>
+                    <span class="metric-label">System Health</span>
+                    <span class="metric-value" style="font-size: 1.15rem; padding-top: 4px;" id="stat-model-status">Operational</span>
+                    <span class="metric-sub">YOLOv8 + SQLite Active</span>
                 </div>
             </div>
         </div>
 
         <!-- Dashboard Layout Grid -->
         <div class="dashboard-grid">
-            <!-- Left Panel: Live Stream & Surveillance Source Selection -->
+            <!-- Left Panel: Live Camera Stream -->
             <div class="panel">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <span>📹</span> Live Surveillance Stream ({{ camera_name }})
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 8-6 4 6 4V8Z"/>
+                            <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                        </svg>
+                        <span>Surveillance Stream ({{ camera_name }})</span>
                     </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <label for="video-source-select" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Feed Source:</label>
-                        <select id="video-source-select" class="input-field" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;">
+
+                    <div class="panel-actions">
+                        <label for="video-source-select" class="form-label" style="margin: 0; white-space: nowrap;">Feed Source:</label>
+                        <select id="video-source-select" class="input-field select-field" style="width: auto; padding: 0.45rem 2rem 0.45rem 0.75rem; font-size: 0.825rem;">
                             <option value="default_footage">Footage Folder CCTV</option>
                             {% for f in footage_files %}
                             <option value="footage/{{ f }}">Footage: {{ f }}</option>
@@ -92,53 +172,99 @@
                     </div>
                 </div>
 
-                <!-- Video Upload Zone -->
-                <div class="upload-dropzone" id="upload-dropzone">
-                    <input type="file" id="video-upload-input" accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm" style="display: none;">
-                    <div class="dropzone-content">
-                        <div class="dropzone-icon">📤</div>
-                        <div class="dropzone-text">
-                            <strong>Upload Bus Video File</strong>
-                            <p>Drag and drop CCTV video (MP4, AVI, MOV) here or browse</p>
+                <div class="panel-body">
+                    <!-- Video Upload Dropzone -->
+                    <div class="upload-dropzone" id="upload-dropzone">
+                        <input type="file" id="video-upload-input" accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm" style="display: none;">
+                        <div class="dropzone-content">
+                            <div class="dropzone-text-group">
+                                <div class="dropzone-icon-box">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="dropzone-heading">Upload CCTV Video Footage</div>
+                                    <div class="dropzone-sub">Drag & drop MP4, AVI, or MOV files here, or browse from computer</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="browse-btn" onclick="document.getElementById('video-upload-input').click();">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
+                                </svg>
+                                <span>Browse Files</span>
+                            </button>
                         </div>
-                        <button type="button" class="btn-secondary" id="browse-btn" onclick="document.getElementById('video-upload-input').click();">
-                            <span>📂 Browse Files</span>
-                        </button>
+                        <div id="upload-status-msg" class="upload-status" style="display: none;"></div>
                     </div>
-                    <div id="upload-status-msg" class="upload-status" style="display: none;"></div>
-                </div>
 
-                <!-- Live Stream Display -->
-                <div class="video-container">
-                    <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed">
-                    <div class="stream-overlay">
-                        <div class="badge-live">
-                            <div class="pulse-dot"></div> {{ camera_name }} - LIVE
+                    <!-- Video Stream Container -->
+                    <div class="video-wrapper">
+                        <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed">
+                        <div class="stream-overlay-badge">
+                            <div class="live-indicator-dot"></div>
+                            <span>{{ camera_name }} &bull; LIVE</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel: Gate Log Feed -->
+            <!-- Right Panel: Gate Activity Log -->
             <div class="panel">
                 <div class="panel-header">
                     <div class="panel-title">
-                        <span>📋</span> Recent Gate Activity Log
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                        <span>Recent Activity Feed</span>
                     </div>
-                    <a href="{{ url_for('records') }}" class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View All Logs</a>
+                    <a href="{{ url_for('records') }}" class="btn btn-secondary btn-sm">
+                        <span>View All</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </a>
                 </div>
 
                 <ul class="activity-list" id="recent-activity-list">
                     {% if logs %}
                         {% for log in logs[:8] %}
                         <li class="activity-item">
-                            <div class="activity-details">
-                                <span class="plate-number">{{ log['Registration Plate'] }}</span>
-                                <span class="activity-time">{{ log['Entry Time'] if log['Entry Time'] != '-' else log['Exit Time'] }}</span>
+                            <div class="activity-main">
+                                <div class="activity-icon-badge {% if log['Status'] == 'ON CAMPUS' %}entry{% else %}exit{% endif %}">
+                                    {% if log['Status'] == 'ON CAMPUS' %}
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"/>
+                                        <polyline points="19 12 12 19 5 12"/>
+                                    </svg>
+                                    {% else %}
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="19" x2="12" y2="5"/>
+                                        <polyline points="5 12 12 5 19 12"/>
+                                    </svg>
+                                    {% endif %}
+                                </div>
+                                <div class="activity-details">
+                                    <span class="plate-badge">{{ log['Registration Plate'] }}</span>
+                                    <span class="activity-meta">{{ log['Entry Time'] if log['Entry Time'] != '-' else log['Exit Time'] }}</span>
+                                </div>
                             </div>
-                            <div style="display: flex; gap: 8px; align-items: center;">
+                            <div class="activity-tags">
                                 {% if log['Snapshot'] %}
-                                <a href="/static/snapshots/{{ log['Snapshot'] }}" target="_blank" title="View JPEG Evidence Snapshot" style="text-decoration: none;">📸</a>
+                                <a href="/static/snapshots/{{ log['Snapshot'] }}" target="_blank" class="btn-snapshot" title="View captured camera evidence">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                                        <circle cx="12" cy="13" r="3"/>
+                                    </svg>
+                                    <span>Photo</span>
+                                </a>
                                 {% endif %}
                                 {% if log['Status'] == 'ON CAMPUS' %}
                                 <span class="badge badge-campus">ON CAMPUS</span>
@@ -149,7 +275,7 @@
                         </li>
                         {% endfor %}
                     {% else %}
-                        <li class="activity-item" style="justify-content: center; color: var(--text-muted);">
+                        <li class="activity-item" style="justify-content: center; color: var(--text-muted); padding: 2.5rem 1rem;">
                             No vehicle activity recorded yet.
                         </li>
                     {% endif %}
@@ -158,8 +284,9 @@
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="app-footer">
-        Campus Bus Gate Entry & Exit Tracker &bull; Department of Security & Transit &bull; Powered by Flask & OpenCV
+        Campus Bus Gate Monitoring System &bull; Department of Security & Campus Transit &bull; Powered by Flask, YOLOv8 & OpenCV
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
