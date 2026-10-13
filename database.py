@@ -233,7 +233,7 @@ class GateDatabase:
 
         wb = openpyxl.Workbook()
         ws = wb.active
-        ws.title = "Gate Activity Logs"
+        ws.title = "JKKM Gate Activity Logs"
 
         export_cols = [
             "Log ID", "Vehicle ID", "Registration Plate", "Direction",

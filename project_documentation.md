@@ -1,7 +1,7 @@
-# Bus Gate Entry & Exit Monitoring System - Full Project Documentation
+# JKKM Bus Gate Entry & Exit Monitoring System - Full Project Documentation
 
 ## 1. Executive Abstract
-The **Bus Gate Entry and Exit Monitoring System** is an artificial intelligence and computer vision solution engineered to automate vehicle tracking at educational institution gates. Leveraging state-of-the-art object detection (YOLOv8), Optical Character Recognition (EasyOCR), spatial centroid tracking, and spreadsheet automation (OpenPyXL/Pandas), the system eliminates manual logbook entry, prevents unauthorized vehicle access, and maintains tamper-proof digital timestamp records.
+The **JKKM Bus Gate Entry and Exit Monitoring System** is an artificial intelligence and computer vision solution engineered to automate vehicle tracking at JKKM Educational Institutions campus gates. Leveraging state-of-the-art object detection (YOLOv8), Optical Character Recognition (EasyOCR), spatial centroid tracking, SQLite database backend, and spreadsheet automation, the system eliminates manual logbook entry, prevents unauthorized vehicle access, and maintains tamper-proof digital timestamp records.
 
 ---
 

@@ -1,6 +1,6 @@
-# 🚌 Campus Bus Gate Entry & Exit Monitoring System
+# JKKM Bus Gate Entry & Exit Monitoring System
 
-An AI-powered computer vision security system designed for automated detection, tracking, license plate identification, entry/exit timestamp logging, JPEG evidence capturing, and Excel reporting of buses at campus gate checkpoints.
+An AI-powered computer vision security system designed for JKKM Educational Institutions for automated detection, tracking, license plate identification, entry/exit timestamp logging, JPEG evidence capturing, and Excel reporting of buses at campus gate checkpoints.
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 ![YOLOv8](https://img.shields.io/badge/YOLOv8-Vehicle%20Detection-green.svg)

@@ -1,7 +1,7 @@
 {
-  "name": "Campus Bus Gate Monitoring System",
-  "short_name": "BusMonitor",
-  "description": "Automated AI-powered gate surveillance, bus tracking, and license plate identification system.",
+  "name": "JKKM Bus Entry and Exit Monitoring System",
+  "short_name": "JKKM Bus",
+  "description": "JKKM Educational Institutions - Automated AI-powered bus gate surveillance, vehicle tracking, and license plate identification system.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",

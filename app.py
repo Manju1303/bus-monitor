@@ -365,7 +365,7 @@ def export_excel():
     return send_file(
         excel_path,
         as_attachment=True,
-        download_name="bus_gate_log_report.xlsx",
+        download_name="jkkm_bus_gate_report.xlsx",
         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
@@ -440,7 +440,7 @@ def serve_sw():
 
 if __name__ == '__main__':
     print("=================================================================")
-    print(" 🚌 CAMPUS BUS GATE ENTRY & EXIT MONITORING SYSTEM")
+    print(" JKKM BUS GATE ENTRY & EXIT MONITORING SYSTEM")
     print(" Running at: http://127.0.0.1:5000")
     print(" Default Login: admin / admin123")
     print("=================================================================")
