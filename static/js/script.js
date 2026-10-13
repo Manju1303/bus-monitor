@@ -223,3 +223,18 @@ function initVideoUpload() {
         statusMsg.style.display = 'block';
     }
 }
+
+/**
+ * Auto-recovery stream reconnection handler
+ */
+function handleStreamError(img) {
+    if (!img) return;
+    console.warn('[STREAM] Video feed interrupted. Attempting reconnect in 2s...');
+    setTimeout(() => {
+        const baseSrc = img.src.split('?')[0];
+        img.src = baseSrc + '?t=' + Date.now();
+    }, 2000);
+}
+
+window.handleStreamError = handleStreamError;
+

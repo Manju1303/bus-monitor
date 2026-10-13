@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application source
 COPY . .
 
+# Pre-cache AI weights (YOLOv8 & EasyOCR) to avoid download timeouts during runtime
+RUN python -c "from ultralytics import YOLO; YOLO('yolov8n.pt'); import easyocr; easyocr.Reader(['en'], gpu=False)"
+
 # Expose default application port
 EXPOSE 5000
 

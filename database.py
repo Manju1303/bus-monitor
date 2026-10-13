@@ -168,7 +168,7 @@ class GateDatabase:
             "total_records": total,
             "on_campus":     on_campus,
             "exited_today":  exited_today,
-            "model_status":  "Active (YOLOv8 + EasyOCR)"
+            "model_status":  "Operational"
         }
 
     def get_records_list(self, search_query: str = "", status_filter: str = "ALL") -> list:

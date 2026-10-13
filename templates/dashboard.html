@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Gate Monitor - JKKM Bus Monitoring System</title>
+    <title>Live Gate Monitor - JKKM Bus Entry &amp; Exit Monitoring System</title>
 
     <!-- PWA Primary Meta Tags -->
     <meta name="theme-color" content="#2563EB">
@@ -35,7 +35,7 @@
                     </svg>
                 </div>
                 <div class="brand-info">
-                    <span class="brand-title">JKKM Bus Transit Monitor</span>
+                    <span class="brand-title">JKKM Bus Entry &amp; Exit Monitoring System</span>
                     <span class="brand-sub">JKK Nattraja Educational Institutions &bull; Vehicle Gate Security</span>
                 </div>
             </a>
@@ -141,8 +141,8 @@
                 </div>
                 <div class="metric-info">
                     <span class="metric-label">System Health</span>
-                    <span class="metric-value" style="font-size: 1.15rem; padding-top: 4px;" id="stat-model-status">Operational</span>
-                    <span class="metric-sub">YOLOv8 + SQLite Active</span>
+                    <span class="metric-value status-text" id="stat-model-status">Operational</span>
+                    <span class="metric-sub">YOLOv8 &bull; EasyOCR Active</span>
                 </div>
             </div>
         </div>
@@ -202,7 +202,7 @@
 
                     <!-- Video Stream Container -->
                     <div class="video-wrapper">
-                        <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed">
+                        <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed" onerror="handleStreamError(this);">
                         <div class="stream-overlay-badge">
                             <div class="live-indicator-dot"></div>
                             <span>{{ camera_name }} &bull; LIVE</span>

@@ -80,18 +80,33 @@ def load_whitelist():
 
 
 def get_pipeline():
-    """Lazily load computer vision detector, OCR reader, and centroid tracker."""
+    """Lazily load computer vision detector, OCR reader, and centroid tracker with error protection."""
     global detector, ocr_reader, tracker
     cfg = load_config()
-    if detector is None:
-        print("[INFO] Loading vehicle detector...")
-        detector = BusDetector(confidence=cfg.get("min_confidence", 0.35))
-    if ocr_reader is None:
-        print("[INFO] Loading license plate reader...")
-        ocr_reader = PlateReader(gpu=False)
-    if tracker is None:
-        print("[INFO] Initializing gate centroid tracker...")
-        tracker = VehicleTracker(gate_line_y=250)
+    try:
+        if detector is None:
+            print("[INFO] Loading vehicle detector...")
+            detector = BusDetector(confidence=cfg.get("min_confidence", 0.35))
+    except Exception as e:
+        print(f"[ERROR] Failed to load BusDetector: {e}")
+        detector = None
+
+    try:
+        if ocr_reader is None:
+            print("[INFO] Loading license plate reader...")
+            ocr_reader = PlateReader(gpu=False)
+    except Exception as e:
+        print(f"[ERROR] Failed to load PlateReader: {e}")
+        ocr_reader = None
+
+    try:
+        if tracker is None:
+            print("[INFO] Initializing gate centroid tracker...")
+            tracker = VehicleTracker(gate_line_y=250)
+    except Exception as e:
+        print(f"[ERROR] Failed to load VehicleTracker: {e}")
+        tracker = None
+
     return detector, ocr_reader, tracker
 
 
@@ -115,12 +130,21 @@ def get_video_capture():
     elif os.path.isfile(current_video_source):
         return cv2.VideoCapture(current_video_source)
     else:
-        # Default: pick first video found in footage/ directory
+        # Default: check for sample_bus_gate.mp4 first
+        sample_path = os.path.join(BASE_DIR, "footage", "sample_bus_gate.mp4")
+        if os.path.isfile(sample_path):
+            cap = cv2.VideoCapture(sample_path)
+            if cap.isOpened():
+                return cap
+
+        # Fallback: pick first video found in footage/ directory
         footage_dir = os.path.join(BASE_DIR, "footage")
         if os.path.isdir(footage_dir):
             for f in sorted(os.listdir(footage_dir)):
                 if f.lower().endswith(('.mp4', '.avi', '.mov', '.mkv', '.webm')):
-                    return cv2.VideoCapture(os.path.join(footage_dir, f))
+                    cap = cv2.VideoCapture(os.path.join(footage_dir, f))
+                    if cap.isOpened():
+                        return cap
 
         print("[WARNING] No default video found in footage/. Please upload a video.")
         return None
@@ -152,13 +176,25 @@ def generate_frames():
         if cap is None or not cap.isOpened():
             cap = get_video_capture()
             if cap is None or not cap.isOpened():
-                # Generate placeholder error frame if no video feed available
-                blank_frame = np.zeros((480, 640, 3), dtype=np.uint8)
-                cv2.putText(blank_frame, "CAMERA FEED UNAVAILABLE", (120, 240),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-                success, buffer = cv2.imencode('.jpg', blank_frame)
-                yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-                time.sleep(1.0)
+                # Generate clean branded standby frame with live timestamp
+                standby = np.zeros((480, 640, 3), dtype=np.uint8)
+                standby[:] = (20, 24, 33)  # Dark slate background
+                cv2.rectangle(standby, (20, 20), (620, 460), (235, 99, 37), 1)  # Accent border
+                
+                ts_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                cv2.putText(standby, "JKKM GATE SURVEILLANCE CAM 01 [STANDBY]", (40, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
+                cv2.putText(standby, f"TIME: {ts_str}", (40, 95),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (148, 163, 184), 1)
+                cv2.putText(standby, "STATUS: AWAITING CCTV FOOTAGE / RTSP STREAM", (40, 240),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.58, (235, 140, 50), 2)
+                cv2.putText(standby, "Please upload a video file or connect RTSP feed above", (40, 280),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.48, (180, 190, 205), 1)
+                
+                success, buffer = cv2.imencode('.jpg', standby)
+                if success:
+                    yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+                time.sleep(0.5)
                 continue
 
         ret, frame = cap.read()
@@ -167,18 +203,19 @@ def generate_frames():
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ret, frame = cap.read()
             if not ret:
-                time.sleep(0.2)
+                time.sleep(0.1)
                 continue
 
         frame_h, frame_w, _ = frame.shape
         gate_y = int(frame_h * cfg.get("gate_line_y_fraction", 0.5))
-        trk.gate_line_y = gate_y
+        if trk is not None:
+            trk.gate_line_y = gate_y
 
-        # Detect buses in frame
-        detections = det.detect(frame)
+        # Detect buses safely
+        detections = det.detect(frame) if det is not None else []
 
         # Update vehicle centroid tracking
-        tracking_results = trk.update(detections)
+        tracking_results = trk.update(detections) if trk is not None else {}
 
         # Draw Campus Gate Line
         cv2.line(frame, (0, gate_y), (frame_w, gate_y), (0, 0, 255), 3)
@@ -203,7 +240,7 @@ def generate_frames():
                     matched_id = veh_id
 
             # Collect OCR vote for matched vehicle
-            if matched_id is not None:
+            if matched_id is not None and ocr is not None and det is not None:
                 roi = det.crop_plate_region(frame, box)
                 plate_text, conf = ocr.read_plate(roi)
                 if plate_text:
@@ -344,11 +381,16 @@ def records():
 
 @app.route('/video_feed')
 def video_feed():
-    """Streaming route serving MJPEG video feed."""
-    return Response(
+    """Streaming route serving MJPEG video feed with reverse proxy support."""
+    resp = Response(
         generate_frames(),
         mimetype='multipart/x-mixed-replace; boundary=frame'
     )
+    resp.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    resp.headers['X-Accel-Buffering'] = 'no'
+    return resp
 
 
 @app.route('/api/stats')

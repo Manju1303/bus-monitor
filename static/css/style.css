@@ -266,12 +266,14 @@ svg {
     background: var(--bg-surface);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
-    padding: 1.25rem;
+    padding: 1.15rem 1.25rem;
     display: flex;
     align-items: center;
     gap: 1rem;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    min-height: 98px;
+    box-sizing: border-box;
 }
 
 .metric-card:hover {
@@ -313,32 +315,42 @@ svg {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    justify-content: center;
 }
 
 .metric-label {
-    font-size: 0.775rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    margin-bottom: 0.15rem;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
 }
 
 .metric-value {
     font-size: 1.65rem;
     font-weight: 700;
     color: var(--text-primary);
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.02em;
+}
+
+.metric-value.status-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--success);
+    letter-spacing: -0.01em;
 }
 
 .metric-sub {
     font-size: 0.75rem;
     color: var(--text-muted);
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.2;
 }
 
 /* --- Dashboard Grid --- */

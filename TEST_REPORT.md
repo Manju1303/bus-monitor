@@ -1,6 +1,6 @@
 # 🧪 Bus Gate Monitoring System - Comprehensive Quality Assurance & Verification Report
 
-**Execution Date & Time:** `2026-10-13 12:31:45`  
+**Execution Date & Time:** `2026-10-13 13:00:28`  
 **Overall Result:** `PASSED`  
 **Total Verification Tests:** `40`  
 **Passed Tests:** `40`  
@@ -67,7 +67,7 @@
 | **Log Matching Vehicle Exit Event** | ✅ PASS | Found matching ON CAMPUS row and updated to EXITED |
 | **KPI Stats (Post-Exit)** | ✅ PASS | Stats: total=1, on_campus=0, exited=1 |
 | **Record Query & Status Filtering** | ✅ PASS | Search query and status filter returned exact matching records |
-| **Excel Spreadsheet Generation** | ✅ PASS | Generated styled openpyxl spreadsheet (5241 bytes) |
+| **Excel Spreadsheet Generation** | ✅ PASS | Generated styled openpyxl spreadsheet (5237 bytes) |
 
 
 ### Functionality: Flask App Routes (app.py)
@@ -80,7 +80,7 @@
 | **POST /login (Valid Auth)** | ✅ PASS | Authenticates and redirects to /dashboard |
 | **GET /dashboard** | ✅ PASS | Serves live dashboard with KPIs and surveillance panel |
 | **GET /records** | ✅ PASS | Serves tabular activity records with export controls |
-| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 0, 'model_status': 'Active (YOLOv8 + EasyOCR)', 'on_campus': 0, 'total_records': 0} |
+| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 0, 'model_status': 'Operational', 'on_campus': 0, 'total_records': 0} |
 | **POST /api/set_source API** | ✅ PASS | Switched active camera feed source |
 | **GET /api/export API** | ✅ PASS | Generates and streams downloadable .xlsx spreadsheet |
 | **GET /logout Session Termination** | ✅ PASS | Terminates session and redirects to /login |
