@@ -1,7 +1,7 @@
 {
   "name": "JKKM Bus Entry and Exit Monitoring System",
   "short_name": "JKKM Bus",
-  "description": "JKKM Educational Institutions - Automated AI-powered bus gate surveillance, vehicle tracking, and license plate identification system.",
+  "description": "JKK Munirajah College - Automated AI-powered bus gate surveillance, vehicle tracking, and license plate identification system.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",
