@@ -66,6 +66,47 @@ class GateDatabase:
         """Compatibility shim — SQLite DB initialises itself automatically."""
         self._init_db()
 
+    def seed_sample_records(self, force: bool = False):
+        """
+        Populate realistic campus bus gate entry and exit records across different timestamps.
+        Only seeds if the database table is empty or force=True.
+        """
+        with self._lock:
+            conn = self._connect()
+            try:
+                count = conn.execute("SELECT COUNT(*) FROM gate_logs").fetchone()[0]
+                if count == 0 or force:
+                    today = datetime.now().strftime("%Y-%m-%d")
+                    # Realistic campus transit schedule across morning, afternoon, and current shifts
+                    sample_records = [
+                        # 1. Early morning arrival & departures (completed trips)
+                        ("BUS-112", "TN33KL6677", "Exit",  f"{today} 06:50:18", f"{today} 07:35:44", 45.4, today, "EXITED", ""),
+                        ("BUS-101", "TN38AB1234", "Exit",  f"{today} 07:45:12", f"{today} 08:30:25", 45.2, today, "EXITED", ""),
+                        ("BUS-102", "TN38BC5678", "Exit",  f"{today} 08:05:40", f"{today} 08:52:18", 46.6, today, "EXITED", ""),
+                        ("BUS-103", "TN33AZ9012", "Exit",  f"{today} 08:15:22", f"{today} 09:10:05", 54.7, today, "EXITED", ""),
+                        ("BUS-104", "TN38CD4321", "Exit",  f"{today} 08:32:15", f"{today} 13:15:40", 283.4, today, "EXITED", ""),
+                        ("BUS-109", "TN38MN7788", "Exit",  f"{today} 14:05:22", f"{today} 14:55:10", 49.8, today, "EXITED", ""),
+                        
+                        # 2. Currently ON CAMPUS buses (active shifts inside JKK Munirajah College campus)
+                        ("BUS-105", "TN33EF8899", "Entry", f"{today} 09:20:10", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-106", "TN38JK1001", "Entry", f"{today} 11:45:33", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-107", "TN38KM2024", "Entry", f"{today} 12:10:50", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-108", "TN33TR4455", "Entry", f"{today} 13:40:15", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-110", "TN38PQ9900", "Entry", f"{today} 14:25:00", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-111", "TN38XY1122", "Entry", f"{today} 15:10:35", None, None, today, "ON CAMPUS", ""),
+                    ]
+                    if force:
+                        conn.execute("DELETE FROM gate_logs")
+                    conn.executemany("""
+                        INSERT INTO gate_logs
+                        (vehicle_id, plate, direction, entry_time, exit_time, duration, date, status, snapshot)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, sample_records)
+                    conn.commit()
+                    print(f"[DB] Successfully populated {len(sample_records)} sample entry & exit records with diverse timestamps for {today}")
+            finally:
+                conn.close()
+
     # ------------------------------------------------------------------
     # Write operations
     # ------------------------------------------------------------------

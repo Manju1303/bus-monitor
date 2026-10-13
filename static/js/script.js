@@ -238,3 +238,19 @@ function handleStreamError(img) {
 
 window.handleStreamError = handleStreamError;
 
+/**
+ * Seed or refresh sample gate activity logs
+ */
+async function populateSampleRecords() {
+    try {
+        const res = await fetch('/api/seed_samples', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        }
+    } catch (err) {
+        console.error('[SAMPLE] Error seeding sample records:', err);
+    }
+}
+
+window.populateSampleRecords = populateSampleRecords;

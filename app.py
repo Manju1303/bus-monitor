@@ -44,6 +44,7 @@ app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024
 db_path = os.path.join(BASE_DIR, "bus_gate.db")
 excel_export_path = os.path.join(BASE_DIR, "bus_gate_log.xlsx")
 logger = GateDatabase(db_path)
+logger.seed_sample_records()
 
 # Lazily initialized model instances
 detector = None
@@ -458,6 +459,13 @@ def upload_video():
         })
     else:
         return jsonify({"success": False, "error": "Unsupported video file format"}), 400
+
+
+@app.route('/api/seed_samples', methods=['POST'])
+def api_seed_samples():
+    """Populate or refresh sample entry and exit records."""
+    logger.seed_sample_records(force=True)
+    return jsonify({"success": True, "message": "Sample entry and exit records populated successfully."})
 
 
 @app.route('/static/snapshots/<filename>')
