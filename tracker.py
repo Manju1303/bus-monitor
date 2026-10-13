@@ -31,6 +31,14 @@ class VehicleTracker:
         self.max_distance = max_distance
         self.gate_line_y = gate_line_y
 
+    def reset(self):
+        """Reset tracking state for new video stream."""
+        self.next_object_id = 1
+        self.objects.clear()
+        self.disappeared.clear()
+        self.positions.clear()
+        self.logged_vehicles.clear()
+
     def register(self, centroid: tuple):
         """Register a new detected vehicle with a unique ID."""
         self.objects[self.next_object_id] = centroid

@@ -38,6 +38,10 @@ venv.bak/
 uploads/
 output/
 models/
+runs/
+dataset/
+datasets/
+data.yaml
 static/snapshots/
 
 # CCTV footage files (1GB+ files excluded from git)

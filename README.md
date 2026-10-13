@@ -38,6 +38,8 @@ Bus-gate-entry-and-exit-monitoring-system/
 ├── config.json              # System configuration parameters
 ├── registered_buses.json    # Campus bus whitelist & alert configuration
 ├── requirements.txt         # Project Python dependencies
+├── train_yolo.py            # CCTV dataset frame extraction & YOLOv8 model training helper
+├── create_sample_footage.py # CCTV sample video generator for testing
 ├── project_documentation.md # Technical documentation
 ├── footage/                 # Folder for CCTV video footage samples
 │   ├── gate_cctv_bus_entry.mp4

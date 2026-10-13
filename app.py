@@ -136,8 +136,19 @@ def generate_frames():
 
     # Multi-frame plate voting store: vehicle_id -> list of OCR string readings
     plate_votes = {}
+    last_source = current_video_source
 
     while True:
+        # Detect video source changes dynamically
+        if last_source != current_video_source:
+            if cap is not None:
+                cap.release()
+            cap = get_video_capture()
+            last_source = current_video_source
+            plate_votes.clear()
+            if trk is not None:
+                trk.reset()
+
         if cap is None or not cap.isOpened():
             cap = get_video_capture()
             if cap is None or not cap.isOpened():
@@ -400,6 +411,7 @@ def upload_video():
         return jsonify({
             "success": True,
             "filename": filename,
+            "path": save_path,
             "message": f"Successfully loaded video: {filename}"
         })
     else:
