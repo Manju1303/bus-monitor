@@ -78,22 +78,21 @@ class GateDatabase:
                 if count == 0 or force:
                     today = datetime.now().strftime("%Y-%m-%d")
                     # Realistic campus transit schedule across morning, afternoon, and current shifts
+                    # Featuring registered college buses: TN36M3915, TN52B9820, TN33AP7979, TN36BC4407, TN30U1166, etc.
                     sample_records = [
                         # 1. Early morning arrival & departures (completed trips)
-                        ("BUS-112", "TN33KL6677", "Exit",  f"{today} 06:50:18", f"{today} 07:35:44", 45.4, today, "EXITED", ""),
-                        ("BUS-101", "TN38AB1234", "Exit",  f"{today} 07:45:12", f"{today} 08:30:25", 45.2, today, "EXITED", ""),
-                        ("BUS-102", "TN38BC5678", "Exit",  f"{today} 08:05:40", f"{today} 08:52:18", 46.6, today, "EXITED", ""),
-                        ("BUS-103", "TN33AZ9012", "Exit",  f"{today} 08:15:22", f"{today} 09:10:05", 54.7, today, "EXITED", ""),
-                        ("BUS-104", "TN38CD4321", "Exit",  f"{today} 08:32:15", f"{today} 13:15:40", 283.4, today, "EXITED", ""),
-                        ("BUS-109", "TN38MN7788", "Exit",  f"{today} 14:05:22", f"{today} 14:55:10", 49.8, today, "EXITED", ""),
+                        ("BUS-101", "TN36M3915", "Exit",  f"{today} 06:45:10", f"{today} 07:30:25", 45.2, today, "EXITED", ""),
+                        ("BUS-102", "TN52B9820", "Exit",  f"{today} 07:15:30", f"{today} 08:02:15", 46.8, today, "EXITED", ""),
+                        ("BUS-103", "TN33AP7979", "Exit", f"{today} 07:35:40", f"{today} 08:25:50", 50.2, today, "EXITED", ""),
+                        ("BUS-104", "TN36BC4407", "Exit", f"{today} 08:00:15", f"{today} 08:50:40", 50.4, today, "EXITED", ""),
+                        ("BUS-105", "TN30U1166", "Exit",  f"{today} 08:20:22", f"{today} 13:10:05", 289.7, today, "EXITED", ""),
                         
                         # 2. Currently ON CAMPUS buses (active shifts inside JKK Munirajah College campus)
-                        ("BUS-105", "TN33EF8899", "Entry", f"{today} 09:20:10", None, None, today, "ON CAMPUS", ""),
-                        ("BUS-106", "TN38JK1001", "Entry", f"{today} 11:45:33", None, None, today, "ON CAMPUS", ""),
-                        ("BUS-107", "TN38KM2024", "Entry", f"{today} 12:10:50", None, None, today, "ON CAMPUS", ""),
-                        ("BUS-108", "TN33TR4455", "Entry", f"{today} 13:40:15", None, None, today, "ON CAMPUS", ""),
-                        ("BUS-110", "TN38PQ9900", "Entry", f"{today} 14:25:00", None, None, today, "ON CAMPUS", ""),
-                        ("BUS-111", "TN38XY1122", "Entry", f"{today} 15:10:35", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-106", "TN47M2439", "Entry", f"{today} 09:15:10", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-107", "TN36Q1842", "Entry", f"{today} 10:40:35", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-108", "TN36BA8843", "Entry", f"{today} 11:25:50", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-109", "TN36M3695", "Entry", f"{today} 12:10:15", None, None, today, "ON CAMPUS", ""),
+                        ("BUS-110", "TN38AB1234", "Entry", f"{today} 13:30:00", None, None, today, "ON CAMPUS", ""),
                     ]
                     if force:
                         conn.execute("DELETE FROM gate_logs")
@@ -103,7 +102,7 @@ class GateDatabase:
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, sample_records)
                     conn.commit()
-                    print(f"[DB] Successfully populated {len(sample_records)} sample entry & exit records with diverse timestamps for {today}")
+                    print(f"[DB] Successfully populated {len(sample_records)} sample entry & exit records with user bus numbers for {today}")
             finally:
                 conn.close()
 
@@ -183,6 +182,28 @@ class GateDatabase:
             "direction":  direction,
             "timestamp":  timestamp_str
         }
+
+    def update_plate_for_log(self, vehicle_id, plate_no: str) -> bool:
+        """Update an existing gate log's plate number if it was logged as UNKNOWN."""
+        if not plate_no or plate_no == "UNKNOWN":
+            return False
+        plate_clean = plate_no.upper()
+        veh_tag = f"BUS-{vehicle_id}"
+        with self._lock:
+            conn = self._connect()
+            try:
+                row = conn.execute(
+                    "SELECT id FROM gate_logs WHERE vehicle_id = ? AND (plate = 'UNKNOWN' OR plate = '-' OR plate IS NULL) ORDER BY id DESC LIMIT 1",
+                    (veh_tag,)
+                ).fetchone()
+                if row:
+                    conn.execute("UPDATE gate_logs SET plate = ? WHERE id = ?", (plate_clean, row["id"]))
+                    conn.commit()
+                    print(f"[DB] Updated vehicle {veh_tag} plate to {plate_clean}")
+                    return True
+                return False
+            finally:
+                conn.close()
 
     # ------------------------------------------------------------------
     # Read operations

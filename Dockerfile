@@ -24,10 +24,14 @@ COPY . .
 # Pre-cache AI weights (YOLOv8 & EasyOCR) to avoid download timeouts during runtime
 RUN python -c "from ultralytics import YOLO; YOLO('yolov8n.pt'); import easyocr; easyocr.Reader(['en'], gpu=False)"
 
+# Thread & memory optimization for cloud environments (prevents OOM on 512MB free tier)
+ENV OMP_NUM_THREADS=1
+ENV MKL_NUM_THREADS=1
+
 # Expose default application port
 EXPOSE 5000
 
 ENV PORT=5000
 
-# Launch production server with multi-threading
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 8 --timeout 120 app:app"]
+# Launch production server with multi-threading and generous timeout for cold starts
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 4 --timeout 180 app:app"]

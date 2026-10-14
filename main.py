@@ -60,7 +60,7 @@ def run_bus_monitoring_system(source_arg=None, display_window: bool = True):
     print("=========================================================")
 
     # 1. Initialize Pipeline Modules
-    detector = BusDetector(confidence=0.35)
+    detector = BusDetector(confidence=0.25)
     ocr_reader = PlateReader(gpu=False)
     tracker = VehicleTracker(gate_line_y=250)
     logger = GateDatabase("bus_gate.db")
@@ -116,12 +116,14 @@ def run_bus_monitoring_system(source_arg=None, display_window: bool = True):
                     matched_id = veh_id
 
             if matched_id is not None:
-                roi = detector.crop_plate_region(frame, box)
-                plate_text, _ = ocr_reader.read_plate(roi)
-                if plate_text:
-                    if matched_id not in plate_votes:
-                        plate_votes[matched_id] = []
-                    plate_votes[matched_id].append(plate_text)
+                votes = plate_votes.get(matched_id, [])
+                if len(votes) < 3:
+                    roi = detector.crop_plate_region(frame, box)
+                    plate_text, _ = ocr_reader.read_plate(roi)
+                    if plate_text:
+                        if matched_id not in plate_votes:
+                            plate_votes[matched_id] = []
+                        plate_votes[matched_id].append(plate_text)
 
             # Resolve current most frequent plate string
             display_plate = "READING..."
@@ -176,7 +178,10 @@ def run_bus_monitoring_system(source_arg=None, display_window: bool = True):
                 pass
 
     cap.release()
-    cv2.destroyAllWindows()
+    try:
+        cv2.destroyAllWindows()
+    except Exception:
+        pass
     print("[SUCCESS] Monitoring pipeline execution completed.")
 
 

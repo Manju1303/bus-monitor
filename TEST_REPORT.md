@@ -1,6 +1,6 @@
 # 🧪 Bus Gate Monitoring System - Comprehensive Quality Assurance & Verification Report
 
-**Execution Date & Time:** `2026-10-13 15:54:49`  
+**Execution Date & Time:** `2026-10-14 10:31:38`  
 **Overall Result:** `PASSED`  
 **Total Verification Tests:** `40`  
 **Passed Tests:** `40`  
@@ -54,7 +54,7 @@
 | **clean_text Filter** | ✅ PASS | Cleaned non-alphanumeric to uppercase: 'TN38AB1234' |
 | **valid_plate Indian Pattern Regex** | ✅ PASS | Validated Indian plate regex (TN, KA, DL valid; INVALID rejected) |
 | **CLAHE & Otsu Preprocessing Variants** | ✅ PASS | Generated 3 contrast-enhanced image variants |
-| **Synthetic License Plate Recognition** | ✅ PASS | OCR extracted 'TN38AB1234' with confidence 0.78 |
+| **Synthetic License Plate Recognition** | ✅ PASS | OCR extracted 'TN38AB1234' with confidence 0.95 |
 
 
 ### Module: GateDatabase & Excel (database.py)
@@ -67,7 +67,7 @@
 | **Log Matching Vehicle Exit Event** | ✅ PASS | Found matching ON CAMPUS row and updated to EXITED |
 | **KPI Stats (Post-Exit)** | ✅ PASS | Stats: total=1, on_campus=0, exited=1 |
 | **Record Query & Status Filtering** | ✅ PASS | Search query and status filter returned exact matching records |
-| **Excel Spreadsheet Generation** | ✅ PASS | Generated styled openpyxl spreadsheet (5238 bytes) |
+| **Excel Spreadsheet Generation** | ✅ PASS | Generated styled openpyxl spreadsheet (5253 bytes) |
 
 
 ### Functionality: Flask App Routes (app.py)
@@ -80,7 +80,7 @@
 | **POST /login (Valid Auth)** | ✅ PASS | Authenticates and redirects to /dashboard |
 | **GET /dashboard** | ✅ PASS | Serves live dashboard with KPIs and surveillance panel |
 | **GET /records** | ✅ PASS | Serves tabular activity records with export controls |
-| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 6, 'model_status': 'Operational', 'on_campus': 6, 'total_records': 12} |
+| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 5, 'model_status': 'Operational', 'on_campus': 5, 'total_records': 10} |
 | **POST /api/set_source API** | ✅ PASS | Switched active camera feed source |
 | **GET /api/export API** | ✅ PASS | Generates and streams downloadable .xlsx spreadsheet |
 | **GET /logout Session Termination** | ✅ PASS | Terminates session and redirects to /login |

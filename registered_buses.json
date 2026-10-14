@@ -1,17 +1,17 @@
 {
   "whitelist": [
+    "TN36M3915",
+    "TN52B9820",
+    "TN33AP7979",
+    "TN36BC4407",
+    "TN30U1166",
+    "TN47M2439",
+    "TN36Q1842",
+    "TN36BA8843",
+    "TN36M3695",
     "TN38AB1234",
     "TN38BC5678",
-    "TN33AZ9012",
-    "TN38CD4321",
-    "TN33EF8899",
-    "TN38JK1001",
-    "TN38KM2024",
-    "TN33TR4455",
-    "TN38MN7788",
-    "TN38PQ9900",
-    "TN38XY1122",
-    "TN33KL6677"
+    "TN33AZ9012"
   ],
   "alert_on_unknown": false
 }

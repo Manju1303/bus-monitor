@@ -6,6 +6,15 @@ license plate identification, activity log search, SQLite logging, and Excel rep
 """
 
 import os
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+
+try:
+    import torch
+    torch.set_num_threads(1)
+except Exception:
+    pass
+
 import json
 import time
 import cv2
@@ -46,10 +55,14 @@ excel_export_path = os.path.join(BASE_DIR, "bus_gate_log.xlsx")
 logger = GateDatabase(db_path)
 logger.seed_sample_records()
 
-# Lazily initialized model instances
+from concurrent.futures import ThreadPoolExecutor
+
+# Lazily initialized model instances & asynchronous OCR worker pool
 detector = None
 ocr_reader = None
 tracker = None
+ocr_executor = ThreadPoolExecutor(max_workers=2)
+ocr_pending_ids = set()
 
 
 def load_config():
@@ -87,7 +100,10 @@ def get_pipeline():
     try:
         if detector is None:
             print("[INFO] Loading vehicle detector...")
-            detector = BusDetector(confidence=cfg.get("min_confidence", 0.35))
+            detector = BusDetector(
+                confidence=cfg.get("min_confidence", 0.25),
+                target_classes=cfg.get("target_classes", [5, 7, 2])
+            )
     except Exception as e:
         print(f"[ERROR] Failed to load BusDetector: {e}")
         detector = None
@@ -128,17 +144,25 @@ def get_video_capture():
         return cv2.VideoCapture(0)
     elif current_video_source.startswith("rtsp://") or current_video_source.startswith("http://"):
         return cv2.VideoCapture(current_video_source)
-    elif os.path.isfile(current_video_source):
-        return cv2.VideoCapture(current_video_source)
     else:
-        # Default: check for sample_bus_gate.mp4 first
+        # Check if direct file or relative to BASE_DIR
+        candidate = current_video_source
+        if not os.path.isabs(candidate):
+            candidate = os.path.join(BASE_DIR, candidate)
+
+        if os.path.isfile(candidate):
+            cap = cv2.VideoCapture(candidate)
+            if cap.isOpened():
+                return cap
+
+        # Fallback 1: check for sample_bus_gate.mp4
         sample_path = os.path.join(BASE_DIR, "footage", "sample_bus_gate.mp4")
         if os.path.isfile(sample_path):
             cap = cv2.VideoCapture(sample_path)
             if cap.isOpened():
                 return cap
 
-        # Fallback: pick first video found in footage/ directory
+        # Fallback 2: pick first video found in footage/ directory
         footage_dir = os.path.join(BASE_DIR, "footage")
         if os.path.isdir(footage_dir):
             for f in sorted(os.listdir(footage_dir)):
@@ -242,16 +266,27 @@ def generate_frames():
                     best_dist = dist
                     matched_id = veh_id
 
-            # Collect OCR vote for matched vehicle (optimized: skip if already determined, rate-limited)
+            # Non-blocking async OCR reading to keep video stream smooth at 30 FPS
             if matched_id is not None and ocr is not None and det is not None:
-                current_votes = len(plate_votes.get(matched_id, []))
-                if current_votes < 2 and (frame_idx % 3 == 0):
+                votes = plate_votes.get(matched_id, [])
+                if len(votes) < 3 and matched_id not in ocr_pending_ids:
                     roi = det.crop_plate_region(frame, box)
-                    plate_text, conf = ocr.read_plate(roi)
-                    if plate_text:
-                        if matched_id not in plate_votes:
-                            plate_votes[matched_id] = []
-                        plate_votes[matched_id].append(plate_text)
+                    if roi is not None and roi.size > 0:
+                        ocr_pending_ids.add(matched_id)
+                        roi_copy = roi.copy()
+
+                        def async_ocr_worker(vid, roi_img):
+                            try:
+                                p_text, conf = ocr.read_plate(roi_img)
+                                if p_text:
+                                    plate_votes.setdefault(vid, []).append(p_text)
+                                    logger.update_plate_for_log(vid, p_text)
+                            except Exception as ex:
+                                print(f"[OCR ERROR] {ex}")
+                            finally:
+                                ocr_pending_ids.discard(vid)
+
+                        ocr_executor.submit(async_ocr_worker, matched_id, roi_copy)
 
             # Determine best plate string via majority voting across frames
             display_plate = "READING..."
@@ -450,6 +485,22 @@ def upload_video():
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
+
+        # Validate that OpenCV can open and decode frames from the video
+        cap_test = cv2.VideoCapture(save_path)
+        is_opened = cap_test.isOpened()
+        ret, test_frame = cap_test.read() if is_opened else (False, None)
+        cap_test.release()
+
+        if not is_opened or not ret or test_frame is None:
+            try:
+                os.remove(save_path)
+            except OSError:
+                pass
+            return jsonify({
+                "success": False,
+                "error": f"The video file '{filename}' could not be decoded. Please upload a standard H.264/MP4, AVI, or MOV video with readable frames."
+            }), 400
 
         current_video_source = save_path
         if tracker is not None:
