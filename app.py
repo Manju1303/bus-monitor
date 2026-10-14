@@ -17,6 +17,7 @@ except Exception:
 
 import json
 import time
+import base64
 import cv2
 import numpy as np
 from collections import Counter
@@ -635,6 +636,128 @@ def api_capture_now():
         "message": f"Successfully captured & recorded {plate_no} ({label.upper()})",
         "record": logged_info,
         "snapshot": snap_filename
+    })
+
+
+@app.route('/api/process_client_frame', methods=['POST'])
+def api_process_client_frame():
+    """
+    Process live camera frames captured directly on client devices (laptops, mobile phones).
+    Runs YOLOv8 vehicle detection, license plate OCR, tracking, and logs gate entries/exits.
+    """
+    global latest_frame_cache, tracker
+    data = request.get_json() or {}
+    image_b64 = data.get('image', '')
+
+    if not image_b64:
+        return jsonify({"success": False, "error": "No image data provided"}), 400
+
+    try:
+        # Strip data URL prefix if present
+        if ',' in image_b64:
+            image_b64 = image_b64.split(',', 1)[1]
+        img_bytes = base64.b64decode(image_b64)
+        nparr = np.frombuffer(img_bytes, np.uint8)
+        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if frame is None or frame.size == 0:
+            return jsonify({"success": False, "error": "Failed to decode frame"}), 400
+    except Exception as e:
+        return jsonify({"success": False, "error": f"Image decode error: {e}"}), 400
+
+    latest_frame_cache = frame.copy()
+    det, ocr, trk = get_pipeline()
+    cfg = load_config()
+    wlist_data = load_whitelist()
+    whitelist = set(wlist_data.get("whitelist", []))
+
+    frame_h, frame_w = frame.shape[:2]
+    gate_y = int(frame_h * cfg.get("gate_line_y_fraction", 0.5))
+    if trk is not None:
+        trk.gate_line_y = gate_y
+
+    detections = det.detect(frame) if det is not None else []
+    tracking_results = trk.update(detections) if trk is not None else {}
+
+    output_detections = []
+    logged_event = None
+
+    for d in detections:
+        box = d['box']
+        x1, y1, x2, y2 = box
+
+        det_cx = int((x1 + x2) / 2.0)
+        det_cy = int((y1 + y2) / 2.0)
+        matched_id = None
+        best_dist = float('inf')
+
+        for veh_id, info in tracking_results.items():
+            tx, ty = info["centroid"]
+            dist = ((det_cx - tx) ** 2 + (det_cy - ty) ** 2) ** 0.5
+            if dist < best_dist:
+                best_dist = dist
+                matched_id = veh_id
+
+        # Plate recognition on bumper ROI
+        plate_str = "READING..."
+        if matched_id is not None and ocr is not None and det is not None:
+            roi = det.crop_plate_region(frame, box, lower_fraction=0.6)
+            if roi is not None and roi.size > 0:
+                p_text, conf = ocr.read_plate(roi)
+                if p_text:
+                    plate_str = p_text
+                    logger.update_plate_for_log(matched_id, p_text)
+
+        output_detections.append({
+            "box": [int(x1), int(y1), int(x2), int(y2)],
+            "confidence": d["confidence"],
+            "label": d.get("label", "Bus").upper(),
+            "plate": plate_str,
+            "vehicle_id": matched_id
+        })
+
+    # Check for line-crossing or presence logging
+    for veh_id, info in tracking_results.items():
+        direction = info.get("direction")
+        if direction and not info.get("is_logged", False):
+            # Find best plate from current detections
+            plate_cand = "UNKNOWN"
+            for out_d in output_detections:
+                if out_d.get("vehicle_id") == veh_id and out_d.get("plate") != "READING...":
+                    plate_cand = out_d["plate"]
+                    break
+
+            # Save evidence snapshot
+            now_ts = int(time.time())
+            snap_filename = f"snap_client_{veh_id}_{now_ts}.jpg"
+            snap_filepath = os.path.join(SNAPSHOT_FOLDER, snap_filename)
+
+            # Draw visual evidence box on saved snapshot
+            evidence_frame = frame.copy()
+            cv2.line(evidence_frame, (0, gate_y), (frame_w, gate_y), (0, 0, 255), 2)
+            for out_d in output_detections:
+                bx1, by1, bx2, by2 = out_d["box"]
+                cv2.rectangle(evidence_frame, (bx1, by1), (bx2, by2), (0, 255, 0), 2)
+                cv2.putText(evidence_frame, f"{out_d['label']}: {out_d['plate']}", (bx1, by1 - 8),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+
+            cv2.imwrite(snap_filepath, evidence_frame)
+            logger.log_vehicle(veh_id, plate_cand, direction, snapshot=snap_filename)
+            trk.logged_vehicles.add(veh_id)
+
+            logged_event = {
+                "vehicle_id": veh_id,
+                "plate": plate_cand,
+                "direction": direction,
+                "snapshot": snap_filename
+            }
+
+    return jsonify({
+        "success": True,
+        "detections": output_detections,
+        "gate_y": gate_y,
+        "frame_width": frame_w,
+        "frame_height": frame_h,
+        "logged_event": logged_event
     })
 
 
