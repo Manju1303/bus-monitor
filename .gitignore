@@ -35,14 +35,16 @@ venv.bak/
 # Project runtime logs & generated files
 *.xlsx
 *.db
-uploads/
+uploads/*
+!uploads/.gitkeep
+static/snapshots/*
+!static/snapshots/.gitkeep
 output/
 models/
 runs/
 dataset/
 datasets/
 data.yaml
-static/snapshots/
 
 # CCTV footage files (large raw footage excluded from git, sample footage included)
 footage/*.mp4

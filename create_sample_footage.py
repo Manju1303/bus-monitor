@@ -13,17 +13,11 @@ import numpy as np
 def prepare_bus_asset(plate_text: str = "TN36 M 3915"):
     """Prepare a realistic bus sprite with the specified license plate."""
     asset_path = os.path.join(os.path.dirname(__file__), "footage", "assets", "bus_only.png")
-    if not os.path.exists(asset_path):
-        # Fallback to bus_asset.jpg
-        base_asset = os.path.join(os.path.dirname(__file__), "footage", "bus_asset.jpg")
-        if os.path.exists(base_asset):
-            bus_full = cv2.imread(base_asset)
-            bus = bus_full[248:892, 248:905]
-        else:
-            # Generate clean bus graphic if asset is missing
-            bus = np.full((320, 320, 3), (30, 190, 235), dtype=np.uint8)
-    else:
+    if os.path.exists(asset_path):
         bus = cv2.imread(asset_path)
+    else:
+        # Generate clean bus graphic if asset is missing
+        bus = np.full((320, 320, 3), (30, 190, 235), dtype=np.uint8)
 
     bh, bw = bus.shape[:2]
 

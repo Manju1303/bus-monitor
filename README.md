@@ -34,21 +34,26 @@ Bus-gate-entry-and-exit-monitoring-system/
 ├── tracker.py               # Centroid vector tracking & gate threshold crossing module
 ├── ocr.py                   # EasyOCR plate extraction with CLAHE & Otsu preprocessing
 ├── database.py              # Thread-safe SQLite backend with Excel export generator
-├── excel.py                 # Direct Excel logger fallback
 ├── config.json              # System configuration parameters
 ├── registered_buses.json    # Campus bus whitelist & alert configuration
 ├── requirements.txt         # Project Python dependencies
+├── render.yaml              # Render cloud deployment blueprint
+├── Dockerfile               # Container deployment configuration
+├── Procfile                 # Production WSGI process specification
 ├── train_yolo.py            # CCTV dataset frame extraction & YOLOv8 model training helper
 ├── create_sample_footage.py # CCTV sample video generator for testing
-├── project_documentation.md # Technical documentation
+├── run_app.bat              # Windows local web application launcher
+├── run_cli.bat              # Windows CLI launcher
+├── run_comprehensive_tests.py # 40-test automated verification suite
 ├── footage/                 # Folder for CCTV video footage samples
-│   ├── gate_cctv_bus_entry.mp4
-│   └── campus_bus_gate_sample.mp4
+│   ├── sample_bus_gate.mp4
+│   ├── sample_bus_gate_2.mp4
+│   └── sample_bus_gate_3.mp4
 ├── static/
 │   ├── css/
-│   │   └── style.css        # Dashboard styling & dark mode UI design system
+│   │   └── style.css        # Enterprise light theme UI design system
 │   ├── js/
-│   │   └── script.js        # Live polling & UI interactive handlers
+│   │   └── script.js        # Live polling, activity feed & camera controls
 │   └── snapshots/           # Auto-saved JPEG gate event snapshots
 └── templates/
     ├── login.html           # Authentication portal
