@@ -173,7 +173,7 @@
                     </div>
                 </div>
 
-                    <!-- Stream Quick Action Bar: Device Camera / CCTV / Manual Capture -->
+                    <!-- Stream Quick Action Bar: Device Camera / Flip / Manual Capture -->
                     <div class="stream-quick-bar">
                         <div class="source-pills">
                             <button type="button" class="btn-source-pill" id="pill-device-cam" onclick="switchVideoSource('device_camera')">
@@ -191,14 +191,6 @@
                                     <path d="M21 21v-5h-5"/>
                                 </svg>
                                 <span>Flip Camera</span>
-                            </button>
-                            <button type="button" class="btn-source-pill active" id="pill-sample-cctv" onclick="switchVideoSource('default_footage')">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect width="20" height="14" x="2" y="4" rx="3"/>
-                                    <circle cx="6.5" cy="15.5" r="1"/>
-                                    <circle cx="17.5" cy="15.5" r="1"/>
-                                </svg>
-                                <span>Gate CCTV Footage</span>
                             </button>
                             <button type="button" class="btn-source-pill btn-capture-action" id="btn-manual-capture" onclick="triggerManualCapture()" title="Snapshot and record the vehicle currently on camera">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -268,13 +260,7 @@
                         </svg>
                         <span>Recent Activity Feed</span>
                     </div>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="populateSampleRecords()" title="Generate sample entry and exit records across different timestamps">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-                            </svg>
-                            <span>Seed Data</span>
-                        </button>
+                    <div>
                         <a href="{{ url_for('records') }}" class="btn btn-secondary btn-sm">
                             <span>View All</span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
