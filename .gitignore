@@ -47,6 +47,8 @@ static/snapshots/
 # CCTV footage files (large raw footage excluded from git, sample footage included)
 footage/*.mp4
 !footage/sample_bus_gate.mp4
+!footage/sample_bus_gate_2.mp4
+!footage/sample_bus_gate_3.mp4
 footage/*.avi
 footage/*.mov
 footage/*.mkv

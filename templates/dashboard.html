@@ -172,7 +172,34 @@
                     </div>
                 </div>
 
-                <div class="panel-body">
+                    <!-- Stream Quick Action Bar: Live Camera / CCTV / Manual Capture -->
+                    <div class="stream-quick-bar">
+                        <div class="source-pills">
+                            <button type="button" class="btn-source-pill {% if current_source == 'webcam' %}active{% endif %}" id="pill-live-cam" onclick="switchVideoSource('webcam')">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m22 8-6 4 6 4V8Z"/>
+                                    <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                                </svg>
+                                <span>Connect Live Camera</span>
+                            </button>
+                            <button type="button" class="btn-source-pill {% if current_source != 'webcam' and not current_source.startswith('uploads') %}active{% endif %}" id="pill-sample-cctv" onclick="switchVideoSource('default_footage')">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="14" x="2" y="4" rx="3"/>
+                                    <circle cx="6.5" cy="15.5" r="1"/>
+                                    <circle cx="17.5" cy="15.5" r="1"/>
+                                </svg>
+                                <span>Gate CCTV Footage</span>
+                            </button>
+                            <button type="button" class="btn-source-pill btn-capture-action" id="btn-manual-capture" onclick="triggerManualCapture()" title="Snapshot and record the vehicle currently on camera">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                                    <circle cx="12" cy="13" r="3"/>
+                                </svg>
+                                <span>Capture &amp; Log</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Video Upload Dropzone -->
                     <div class="upload-dropzone" id="upload-dropzone">
                         <input type="file" id="video-upload-input" accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm" style="display: none;">
@@ -205,7 +232,7 @@
                         <img id="live-stream-feed" src="{{ url_for('video_feed') }}" class="video-stream" alt="Live Camera Gate Feed" onerror="handleStreamError(this);">
                         <div class="stream-overlay-badge">
                             <div class="live-indicator-dot"></div>
-                            <span>{{ camera_name }} &bull; LIVE</span>
+                            <span id="camera-badge-text">{{ camera_name }} &bull; LIVE</span>
                         </div>
                     </div>
                 </div>
@@ -296,6 +323,9 @@
     <footer class="app-footer">
         JKKM Bus Entry &amp; Exit Monitoring System &bull; JKK Munirajah College &bull; Department of Security &amp; Campus Transit
     </footer>
+
+    <!-- Live Activity Toast Notifications -->
+    <div id="live-toast-container" class="live-toast-container"></div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

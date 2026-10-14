@@ -131,6 +131,7 @@ class VehicleTracker:
             direction = None
             pos_history = self.positions[object_id]
             
+            # 1. Immediate line crossing detection across gate_line_y
             if len(pos_history) >= 2:
                 prev_y = pos_history[-2]
                 curr_y = pos_history[-1]
@@ -141,6 +142,16 @@ class VehicleTracker:
                 # Bottom-to-Top crossing -> Exit
                 elif prev_y > self.gate_line_y and curr_y <= self.gate_line_y:
                     direction = "Exit"
+
+            # 2. Stable presence / gate area inference (for live webcam or vehicles stopping at gate)
+            if direction is None and len(pos_history) >= 8:
+                net_dy = pos_history[-1] - pos_history[0]
+                if net_dy > 15:
+                    direction = "Entry"
+                elif net_dy < -15:
+                    direction = "Exit"
+                else:
+                    direction = "Entry" if pos_history[-1] >= self.gate_line_y else "Exit"
 
             tracking_results[object_id] = {
                 "centroid": centroid,

@@ -129,6 +129,7 @@ def get_pipeline():
 
 # Global active video source state: 'default_footage', 'webcam', RTSP URL, or file path
 current_video_source = "default_footage"
+latest_frame_cache = None
 
 
 def is_allowed_file(filename):
@@ -137,11 +138,38 @@ def is_allowed_file(filename):
 
 
 def get_video_capture():
-    """Resolve OpenCV VideoCapture stream based on current source selection."""
+    """Resolve OpenCV VideoCapture stream based on current source selection with Windows DirectShow support."""
     global current_video_source
+    import platform
 
     if current_video_source == "webcam":
-        return cv2.VideoCapture(0)
+        # On Windows, DirectShow (CAP_DSHOW) opens webcams without delay or MSMF locking
+        if platform.system() == "Windows":
+            cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+            if not cap.isOpened():
+                cap = cv2.VideoCapture(0)
+        else:
+            cap = cv2.VideoCapture(0)
+
+        if cap.isOpened():
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            return cap
+
+        # Try secondary camera index (device 1)
+        if platform.system() == "Windows":
+            cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+        else:
+            cap = cv2.VideoCapture(1)
+
+        if cap.isOpened():
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            return cap
+
+        print("[WARNING] Live webcam (Camera 0/1) could not be opened.")
+        return None
+
     elif current_video_source.startswith("rtsp://") or current_video_source.startswith("http://"):
         return cv2.VideoCapture(current_video_source)
     else:
@@ -176,7 +204,8 @@ def get_video_capture():
 
 
 def generate_frames():
-    """Video stream frame generator with multi-frame OCR voting and snapshot logging."""
+    """Video stream frame generator with multi-frame OCR voting, loop auto-reset, and snapshot logging."""
+    global latest_frame_cache
     det, ocr, trk = get_pipeline()
     cap = get_video_capture()
     cfg = load_config()
@@ -187,6 +216,8 @@ def generate_frames():
     plate_votes = {}
     last_source = current_video_source
     frame_idx = 0
+    banner_text = ""
+    banner_timer = 0
 
     while True:
         frame_idx += 1
@@ -203,21 +234,31 @@ def generate_frames():
         if cap is None or not cap.isOpened():
             cap = get_video_capture()
             if cap is None or not cap.isOpened():
-                # Generate clean branded standby frame with live timestamp
+                # Branded standby frame with dynamic status
                 standby = np.zeros((480, 640, 3), dtype=np.uint8)
                 standby[:] = (20, 24, 33)  # Dark slate background
-                cv2.rectangle(standby, (20, 20), (620, 460), (235, 99, 37), 1)  # Accent border
-                
+                cv2.rectangle(standby, (20, 20), (620, 460), (37, 99, 235), 2)
+
                 ts_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                cv2.putText(standby, "JKKM GATE SURVEILLANCE CAM 01 [STANDBY]", (40, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
-                cv2.putText(standby, f"TIME: {ts_str}", (40, 95),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (148, 163, 184), 1)
-                cv2.putText(standby, "STATUS: AWAITING CCTV FOOTAGE / RTSP STREAM", (40, 240),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.58, (235, 140, 50), 2)
-                cv2.putText(standby, "Please upload a video file or connect RTSP feed above", (40, 280),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.48, (180, 190, 205), 1)
-                
+                if current_video_source == "webcam":
+                    cv2.putText(standby, "JKKM GATE SURVEILLANCE - LIVE WEBCAM", (35, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
+                    cv2.putText(standby, f"TIME: {ts_str}", (35, 95),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (148, 163, 184), 1)
+                    cv2.putText(standby, "STATUS: CAMERA 0 NOT DETECTED / DISCONNECTED", (35, 220),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.58, (0, 165, 255), 2)
+                    cv2.putText(standby, "Please plug in a USB camera or switch to CCTV video footage", (35, 260),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.48, (200, 210, 225), 1)
+                else:
+                    cv2.putText(standby, "JKKM GATE SURVEILLANCE CAM 01 [STANDBY]", (40, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2)
+                    cv2.putText(standby, f"TIME: {ts_str}", (40, 95),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (148, 163, 184), 1)
+                    cv2.putText(standby, "STATUS: AWAITING CCTV FOOTAGE / RTSP STREAM", (40, 240),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.58, (235, 140, 50), 2)
+                    cv2.putText(standby, "Please upload a video file or select footage from dropdown", (40, 280),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.48, (180, 190, 205), 1)
+
                 success, buffer = cv2.imencode('.jpg', standby)
                 if success:
                     yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
@@ -226,28 +267,34 @@ def generate_frames():
 
         ret, frame = cap.read()
         if not ret:
-            # Re-seek video to frame 0 for continuous looping
+            # Re-seek video to frame 0 for continuous looping & reset tracker for fresh detection
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            if trk is not None:
+                trk.reset()
+            plate_votes.clear()
             ret, frame = cap.read()
             if not ret:
                 time.sleep(0.1)
                 continue
+
+        # Cache latest clean frame for instant manual capture
+        latest_frame_cache = frame.copy()
 
         frame_h, frame_w, _ = frame.shape
         gate_y = int(frame_h * cfg.get("gate_line_y_fraction", 0.5))
         if trk is not None:
             trk.gate_line_y = gate_y
 
-        # Detect buses safely
+        # Detect buses and transit vehicles
         detections = det.detect(frame) if det is not None else []
 
         # Update vehicle centroid tracking
         tracking_results = trk.update(detections) if trk is not None else {}
 
         # Draw Campus Gate Line
-        cv2.line(frame, (0, gate_y), (frame_w, gate_y), (0, 0, 255), 3)
-        cv2.putText(frame, f"GATE THRESHOLD ({cfg.get('camera_name', 'Gate Cam')})", (15, gate_y - 12),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 2)
+        cv2.line(frame, (0, gate_y), (frame_w, gate_y), (0, 0, 255), 2)
+        cv2.putText(frame, f"GATE THRESHOLD ({cfg.get('camera_name', 'Gate Cam')})", (15, gate_y - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
         # Match detection bounding boxes to vehicle IDs and collect OCR votes
         for d in detections:
@@ -270,7 +317,7 @@ def generate_frames():
             if matched_id is not None and ocr is not None and det is not None:
                 votes = plate_votes.get(matched_id, [])
                 if len(votes) < 3 and matched_id not in ocr_pending_ids:
-                    roi = det.crop_plate_region(frame, box)
+                    roi = det.crop_plate_region(frame, box, lower_fraction=0.6)
                     if roi is not None and roi.size > 0:
                         ocr_pending_ids.add(matched_id)
                         roi_copy = roi.copy()
@@ -298,15 +345,20 @@ def generate_frames():
             is_unregistered = whitelist and display_plate != "READING..." and display_plate not in whitelist
             box_color = (0, 0, 255) if is_unregistered else (0, 255, 0)
 
+            label_name = d.get('label', 'Bus').upper()
             cv2.rectangle(frame, (x1, y1), (x2, y2), box_color, 2)
-            cv2.putText(frame, f"Bus ({d['confidence']})", (x1, y1 - 8),
+            cv2.putText(frame, f"{label_name} ({d['confidence']})", (x1, y1 - 8),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.55, box_color, 2)
 
             if display_plate != "READING...":
-                cv2.putText(frame, f"PLATE: {display_plate}", (x1, y2 + 25),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+                # Draw plate badge box
+                plate_badge_text = f"PLATE: {display_plate}"
+                (tw, th), _ = cv2.getTextSize(plate_badge_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+                cv2.rectangle(frame, (x1, y2 + 5), (x1 + tw + 10, y2 + th + 15), (0, 0, 0), -1)
+                cv2.putText(frame, plate_badge_text, (x1 + 5, y2 + th + 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
 
-        # Handle vehicle line crossing events
+        # Handle vehicle line crossing / presence events
         for veh_id, info in tracking_results.items():
             cx, cy = info["centroid"]
             direction = info["direction"]
@@ -331,10 +383,19 @@ def generate_frames():
                 logger.log_vehicle(veh_id, plate_no, direction, snapshot=snap_filename)
                 trk.logged_vehicles.add(veh_id)
 
-                # On-screen event banner
-                alert_text = f"LOGGED {direction.upper()}: {plate_no}"
-                cv2.putText(frame, alert_text, (20, 45),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.85, (0, 255, 255), 3)
+                # Persistent visual banner for 60 frames (~2s)
+                banner_text = f"LOGGED {direction.upper()}: {plate_no} [EVIDENCE SAVED]"
+                banner_timer = 60
+
+        # Draw active event notification banner if timer active
+        if banner_timer > 0:
+            banner_timer -= 1
+            overlay = frame.copy()
+            cv2.rectangle(overlay, (15, 12), (frame_w - 15, 58), (15, 23, 42), -1)
+            cv2.addWeighted(overlay, 0.8, frame, 0.2, 0, frame)
+            cv2.rectangle(frame, (15, 12), (frame_w - 15, 58), (16, 185, 129), 2)
+            cv2.putText(frame, banner_text, (28, 42),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.72, (255, 255, 255), 2)
 
         success, buffer = cv2.imencode('.jpg', frame)
         if not success:
@@ -514,6 +575,67 @@ def upload_video():
         })
     else:
         return jsonify({"success": False, "error": "Unsupported video file format"}), 400
+
+
+@app.route('/api/recent_logs')
+def api_recent_logs():
+    """Return latest 10 gate logs for dynamic real-time dashboard activity feed."""
+    logs = logger.get_records_list()
+    return jsonify({
+        "success": True,
+        "logs": logs[:10]
+    })
+
+
+@app.route('/api/capture_now', methods=['POST'])
+def api_capture_now():
+    """Manually capture and record the vehicle currently visible in the active camera stream."""
+    global latest_frame_cache, detector, ocr_reader, tracker
+    if latest_frame_cache is None:
+        return jsonify({"success": False, "error": "No active video stream frame available."}), 400
+
+    det, ocr, trk = get_pipeline()
+    frame = latest_frame_cache.copy()
+    detections = det.detect(frame) if det is not None else []
+
+    if not detections:
+        return jsonify({
+            "success": False,
+            "error": "No bus or vehicle detected in current camera view. Ensure a vehicle is clearly visible."
+        }), 400
+
+    # Pick the most prominent vehicle detection
+    best_det = max(detections, key=lambda d: (d['box'][2]-d['box'][0]) * (d['box'][3]-d['box'][1]))
+    box = best_det['box']
+    label = best_det.get('label', 'Bus')
+    roi = det.crop_plate_region(frame, box, lower_fraction=0.6)
+
+    plate_no = "UNKNOWN"
+    if ocr is not None and roi is not None and roi.size > 0:
+        plate_str, conf = ocr.read_plate(roi)
+        if plate_str:
+            plate_no = plate_str
+
+    # Annotate frame snapshot
+    x1, y1, x2, y2 = box
+    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    cv2.putText(frame, f"{label.upper()}: {plate_no}", (x1, y1 - 8),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
+
+    now_ts = int(time.time())
+    snap_filename = f"snap_manual_{now_ts}.jpg"
+    snap_filepath = os.path.join(SNAPSHOT_FOLDER, snap_filename)
+    cv2.imwrite(snap_filepath, frame)
+
+    veh_id = now_ts % 1000
+    logged_info = logger.log_vehicle(veh_id, plate_no, "Entry", snapshot=snap_filename)
+
+    return jsonify({
+        "success": True,
+        "message": f"Successfully captured & recorded {plate_no} ({label.upper()})",
+        "record": logged_info,
+        "snapshot": snap_filename
+    })
 
 
 @app.route('/api/seed_samples', methods=['POST'])

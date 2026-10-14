@@ -1,6 +1,6 @@
 # 🧪 Bus Gate Monitoring System - Comprehensive Quality Assurance & Verification Report
 
-**Execution Date & Time:** `2026-10-14 10:31:38`  
+**Execution Date & Time:** `2026-10-14 13:53:29`  
 **Overall Result:** `PASSED`  
 **Total Verification Tests:** `40`  
 **Passed Tests:** `40`  
@@ -80,7 +80,7 @@
 | **POST /login (Valid Auth)** | ✅ PASS | Authenticates and redirects to /dashboard |
 | **GET /dashboard** | ✅ PASS | Serves live dashboard with KPIs and surveillance panel |
 | **GET /records** | ✅ PASS | Serves tabular activity records with export controls |
-| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 5, 'model_status': 'Operational', 'on_campus': 5, 'total_records': 10} |
+| **GET /api/stats API** | ✅ PASS | Returns JSON telemetry: {'exited_today': 5, 'model_status': 'Operational', 'on_campus': 13, 'total_records': 18} |
 | **POST /api/set_source API** | ✅ PASS | Switched active camera feed source |
 | **GET /api/export API** | ✅ PASS | Generates and streams downloadable .xlsx spreadsheet |
 | **GET /logout Session Termination** | ✅ PASS | Terminates session and redirects to /login |
@@ -101,7 +101,7 @@
 | Test Case | Status | Verification Details |
 |---|:---:|---|
 | **Zero Emoji Audit** | ✅ PASS | Scanned 5 frontend files: 0 emojis found |
-| **Clean Vector SVG Icon Usage** | ✅ PASS | SVGs: login=3, dashboard=17, records=11 |
+| **Clean Vector SVG Icon Usage** | ✅ PASS | SVGs: login=3, dashboard=20, records=11 |
 | **Typography Tokens (Inter & JetBrains Mono)** | ✅ PASS | Primary sans: Inter, Monospace: JetBrains Mono for plates |
 | **Enterprise Light Color Palette** | ✅ PASS | Verified slate-50 (#F8FAFC), pure white (#FFFFFF), slate-900 (#0F172A), blue-600 (#2563EB) |
 | **Responsive Grid & Flexbox Alignment** | ✅ PASS | Responsive layout handles Desktop (>1024px), Tablet (1024px), and Mobile (640px) |
